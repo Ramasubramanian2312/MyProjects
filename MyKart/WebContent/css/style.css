@@ -1564,6 +1564,14 @@ h3.page-hed{
 	border:1px solid #D6D6D6;
 	outline:none;
 }
+.cus_info_wrap input[type="password"] {
+	width: 71%;
+	padding: 4px;
+	font-size: 13px;
+	font-weight: 400;
+	border:1px solid #D6D6D6;
+	outline:none;
+}
 .botton{
 	background: #175ed4;
 	border-radius: 3px;
@@ -3190,6 +3198,8 @@ margin-bottom: 15px;
 padding: 0 15px;
 }
 .cus_info_wrap input[type="text"] {
+width: 69%;}
+.cus_info_wrap input[type="password"] {
 width: 69%;}
 .checkbox {
 width: 80%;
