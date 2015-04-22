@@ -103,7 +103,7 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 						<li class="last">5</li>
 					</ul>
 					<div class="sign-up-right">
-						<a href="login.html">Sign Up</a>
+						<a href="login.jsp">Sign Up</a>
 					</div>
 				</div>
 				<div class="clearfix"></div>

@@ -1,4 +1,4 @@
-package model;
+package edu.neu.cs5200.project.models;
 
 import java.io.Serializable;
 import javax.persistence.*;

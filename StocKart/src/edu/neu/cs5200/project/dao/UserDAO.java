@@ -6,7 +6,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 
-import model.Userbean;
+import edu.neu.cs5200.project.models.Userbean;
 
 
 public class UserDAO 
