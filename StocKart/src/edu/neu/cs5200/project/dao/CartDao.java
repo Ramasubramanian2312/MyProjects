@@ -69,6 +69,19 @@ public class CartDao {
     		query.setParameter("username", username);
             return (List<Cart>)query.getResultList();
     }
+    
+    public double findCartTotal(String username)
+    {		
+    		Query query = em.createQuery("Select (c.salePrice)*(c.quantity) from Cart c where c.customerId = :username");
+    		query.setParameter("username", username);
+            //return Math.round((double) query.getSingleResult());
+    		double total=0;
+    		List<Double> lst = (List<Double>)query.getResultList();
+    		for(Double d:lst){
+    			total+=d;
+    		}
+    		return Math.round(total);
+    }
 
 	public CartDao() {
 		super();
@@ -77,5 +90,6 @@ public class CartDao {
 	public static void main(String[] args) {
 		CartDao c = new CartDao();
 		System.out.println(c.findAllItems("rama2312").get(0).getQuantity());
+		System.out.println(c.findCartTotal("rama2312"));
 	}
 }
