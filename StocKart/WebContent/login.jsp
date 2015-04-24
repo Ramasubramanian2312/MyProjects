@@ -4,7 +4,11 @@ Author URL: http://w3layouts.com
 License: Creative Commons Attribution 3.0 Unported
 License URL: http://creativecommons.org/licenses/by/3.0/
 -->
-<%@ page language="java" contentType="text/html; charset=UTF-8"  %>
+<%@ page language="java" contentType="text/html; charset=UTF-8" 
+import="edu.neu.cs5200.project.rest.client.*"
+	import="edu.neu.cs5200.project.models.*"
+	import="edu.neu.cs5200.project.dao.*"
+	import="java.util.*" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -100,7 +104,9 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 							<i class="cart"></i>
 							<a href="#">Shopping Cart</a>
 						</li>
-						<li class="last">5</li>
+						 <li class="last">
+						 0
+						</li>
 					</ul>
 					<div class="sign-up-right">
 						<a href="login.jsp">Sign Up</a>
@@ -112,7 +118,7 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 		<div class="wrap">
 			<div class="header-bottom">
 				<div class="logo">
-					<a href="index.html"><img src="images/logo.jpg" class="img-responsive" alt="" /></a>
+					<a href="index.jsp"><img src="images/logo.jpg" class="img-responsive" alt="" /></a>
 				</div>
 				<div class="search">
 					<div class="search2">
@@ -1234,7 +1240,7 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 		<div class="login-content">
 			<div class="pag-nav">
 				<ul class="p-list">
-					<li><a href="index.html">Home</a></li> &nbsp;&nbsp;/&nbsp;
+					<li><a href="index.jsp">Home</a></li> &nbsp;&nbsp;/&nbsp;
 					<li class="act">&nbsp;Login</li>
 				</ul>
 			</div>

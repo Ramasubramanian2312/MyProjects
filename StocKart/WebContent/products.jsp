@@ -4,14 +4,16 @@ Author URL: http://w3layouts.com
 License: Creative Commons Attribution 3.0 Unported
 License URL: http://creativecommons.org/licenses/by/3.0/
 -->
-<%@page import="edu.neu.cs5200.project.dao.CartDao"%>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
-	pageEncoding="ISO-8859-1" import="edu.neu.cs5200.project.rest.client.*"
+	pageEncoding="ISO-8859-1" 
+	import="edu.neu.cs5200.project.rest.client.*"
+	import="edu.neu.cs5200.project.models.*"
+	import="edu.neu.cs5200.project.dao.*"
 	import="java.util.*"%>
 <!DOCTYPE html>
 <html>
 <head>
-<title>MyKART an E-Commerce online Shopping Site</title>
+<title>BOX SHOP a E-commerce online Shopping Category Flat Bootstarp responsive Website Template| Products :: w3layouts</title>
 <link href="css/bootstrap.css" rel='stylesheet' type='text/css' />
 <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
 <script src="js/jquery.min.js"></script>
@@ -30,7 +32,6 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 <link href="css/megamenu.css" rel="stylesheet" type="text/css" media="all" />
 <script type="text/javascript" src="js/megamenu.js"></script>
 <script>$(document).ready(function(){$(".megamenu").megamenu();});</script>
-<%@ page session="true" %>
 <!-- start slider -->
 <script src="js/responsiveslides.min.js"></script>
  <script>
@@ -50,7 +51,7 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 				$("#flexiselDemo").flexisel({
 					visibleItems: 5,
 					animationSpeed: 1000,
-					autoPlay: false,
+					autoPlay: true,
 					autoPlaySpeed: 3000,    		
 					pauseOnHover: true,
 					enableResponsiveBreakpoints: true,
@@ -76,9 +77,64 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 </head>
 <body>
 	<!-- header-section-starts -->
-	<%
-	CartDao cdao = new CartDao();
-	%>
+		<script>
+			function itemPresent() 
+			{alert("Item already added to cart.");}
+			
+		</script>
+		<%
+			String itemId = null;
+			String action = null;
+			Product product = null;
+			Map<String, String> messages = new HashMap<String, String>();
+			action = request.getParameter("action");
+			itemId = request.getParameter("itemId");
+			CartDao cdao = new CartDao();
+			ShoppingRestClient client = new ShoppingRestClient();
+			if(action!=null)
+			{
+				if(session.getAttribute("username")!=null)
+				{
+					if("create".equals(action))
+					{	
+						Cart cart = new Cart();
+						product = client.findProductById(itemId);
+						cart.setItemId(product.getItemId()+"");
+						cart.setQuantity(1);
+						cart.setCustomerId(session.getAttribute("username").toString());
+						cart.setName(product.getName());
+						cart.setThumbnailImage(product.getThumbnailImage());
+						cart.setSalePrice(product.getSalePrice());
+						
+						if(cdao.findCart(itemId) != null)
+						{
+							%>
+							<script>itemPresent();</script>
+							<%
+						}
+						else
+						{
+							cdao.createCartItem(cart);	
+						}
+						
+					}
+				}
+				else
+				{
+					%>
+					<jsp:forward page="login.jsp" />
+					<%
+				}
+			}
+			String searchText = request.getParameter("search");
+			List<Product> i = new ArrayList<Product>();
+			if(searchText!=null){				
+				Products products = client.findProductByName(searchText);
+				if(products!=null)
+				i = products.getItems();
+			}
+
+		%>
 	<div class="header">
 		<div class="top-header">
 			<div class="wrap">
@@ -111,7 +167,7 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 							<i class="cart"></i>
 							<a href="viewcart.jsp">Shopping Cart</a>
 						</li>
-						<li class="last">
+					 <li class="last">
 						 <% if(session.getAttribute("username") == null) 
 							{ %>0
 							<% } else {%> <%=cdao.findNoOfItems(session.getAttribute("username").toString()) %>
@@ -155,126 +211,162 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 			<h4>Most Popular<i class="arrow"></i></h4>
 			<div class="top-menu">
 				<!-- start header menu -->
-				<ul class="megamenu skyblue">
-			<li><a class="color1" href="#">mobiles</a>		
-			</li>
-			<li class="grid"><a class="color2" href="#">tablets</a>
-				</li>
-			<li class="grid"><a class="color4" href="#">laptops</a>				
-				</li>				
-				<li><a class="color5" href="#">cameras</a>
-				</li>
-				<li><a class="color6" href="#">watches</a>
-				</li>
-				<li><a class="color8" href="#">eBooks</a>
-				</li>
-				<li><a class="color9" href="#">T-shirts</a>				
-				</li>
-				<li><a class="color5" href="#">sarees</a>
-				</li>
-				<li><a class="color1" href="#">jeans</a>
-				</li>
-				<li><a class="color10" href="#">perfumes</a>			
-				</li>
-				<li><a class="color2" href="#">sofas</a>
-				</li>
-				<li><a class="color6" href="#">sunglasses</a>
-				</li>
-		 </ul> 
 	</div>
 		<div class="clearfix"></div>
 		</div>
-		<div class="main-top">
-			<div class="col-md-8 banner">
-				<!-- start slider -->
-				<!----->
-				<div class="slider">	  
-					  <div class="callbacks_container">
-						  <ul class="rslides" id="slider">
-							 <li>
-								 <img src="images/slider1.jpg" alt=""/>
-							 </li>
-							 <li>
-								 <img src="images/slider2.jpg" alt=""/>
-							 </li>
-							 <li>
-								 <img src="images/slider3.jpg" alt=""/>
-							 </li>
-							 <li>
-								 <img src="images/slider4.jpg" alt=""/>
-							 </li>
-						  </ul>	      
-					  </div>
+		<div class="main">
+    <div class="content">
+    	<div class="content_top">
+    		<div class="heading">
+    		<h3>Feature Products</h3>
+    		</div>
+    		<div class="sort">
+    		<p>Sort by:
+    			<select>
+    				<option>Lowest Price</option>
+    				<option>Highest Price</option>
+    				<option>Lowest Price</option>
+    				<option>Lowest Price</option>
+    				<option>Lowest Price</option>
+    				<option>In Stock</option>  				   				
+    			</select>
+    		</p>
+    		</div>
+    		<div class="show">
+    		<p>Show:
+    			<select>
+    				<option>4</option>
+    				<option>8</option>
+    				<option>12</option>
+    				<option>16</option>
+    				<option>20</option>
+    				<option>In Stock</option>  				   				
+    			</select>
+    		</p>
+    		</div>
+    		<div class="page-no">
+    			<p>Result Pages:<ul>
+    				<li><a href="#">1</a></li>
+    				<li class="active"><a href="#">2</a></li>
+    				<li><a href="#">3</a></li>
+    				<li>[<a href="#"> Next>>></a >]</li>
+    				</ul></p>
+    		</div>
+    		<div class="clearfix"></div>
+    	</div>
+	      		<%
+	      		for (int j=0; j<i.size() ; j++) {
+	      			if((j % 4) == 0)
+	      		%>
+	      		<div class="section group">
+				<div class="grid_1_of_4 images_1_of_4">
+					 <a href="single.html"><img src="<%= i.get(j).getThumbnailImage() %>" alt="" /></a>
+					 <h2><%=i.get(j).getName() %></h2>
+					 <p><img src="<%= i.get(j).getCustomerRatingImage() %>" alt="" /></p>
+					 <%-- <h2><%=i.get(j).getCustomerRating() %></h2> --%>
+					 <%-- <p><%=i.get(j).getShortDescription() %></p> --%>
+					 <p><span class="price">$<%= i.get(j).getSalePrice() %></span></p>
+					 <form action="products.jsp" onsubmit="return validItem();">
+					 	<input type="hidden" name="itemId" value="<%= i.get(j).getItemId() %>" />
+					 	<input type="hidden" name="search" value="<%= searchText %>" />
+					 	<span><button class="btn button" name="action" value="create">AddToCart</button></span>
+					 </form>
+				     <div class="button"><span><a href="single.html" class="details">Details</a></span></div>
 				</div>
-				<!----->
-				<!-- end  slider -->
-		   </div>
-		   <div class="col-md-4 right-grid">
-				<div class="right-grid-top">
-					<div class="r-sale text-center">
-						<h6>Winter wear</h6>
-						<h2>Sale</h2>
+				<%
+				if((j % 4) == 0)
+					%>
 					</div>
-					<div class="r-discount">
-						<span>upto</span>
-						<h2>50%</h2>
-						<p>OFF</p>
-						<a href="#">shop now<i class="go"></i></a>
+					<%
+					}
+				%>
+				<div class="clearfix">
+			</div>
+				
+			</div>
+			<div class="content_bottom">
+    		<div class="heading">
+    		<h3>New Products</h3>
+    		</div>
+    		<div class="sort">
+    		<p>Sort by:
+    			<select>
+    				<option>Lowest Price</option>
+    				<option>Highest Price</option>
+    				<option>Lowest Price</option>
+    				<option>Lowest Price</option>
+    				<option>Lowest Price</option>
+    				<option>In Stock</option>  				   				
+    			</select>
+    		</p>
+    		</div>
+    		<div class="show">
+    		<p>Show:
+    			<select>
+    				<option>4</option>
+    				<option>8</option>
+    				<option>12</option>
+    				<option>16</option>
+    				<option>20</option>
+    				<option>In Stock</option>  				   				
+    			</select>
+    		</p>
+    		</div>
+    		<div class="page-no">
+    			<p>Result Pages:<ul>
+    				<li><a href="#">1</a></li>
+    				<li class="active"><a href="#">2</a></li>
+    				<li><a href="#">3</a></li>
+    				<li>[<a href="#"> Next>>></a >]</li>
+    				</ul></p>
+    		</div>
+    		<div class="clearfix"></div>
+    	</div>
+			<div class="section group">
+				<div class="grid_1_of_4 images_1_of_4">
+					 <a href="single.html"><img src="images/new-pic1.jpg" alt="" /></a>
+					 <div class="discount">
+					 <span class="percentage">40%</span>
 					</div>
-					<div class="clearfix"></div>
+					 <h2>Lorem Ipsum is simply </h2>
+					 <p><span class="strike">$438.99</span><span class="price">$403.66</span></p>
+				     <div class="button"><span><img src="images/cart.jpg" alt="" /><a href="single.html" class="cart-button">Add to Cart</a></span> </div>
+				     <div class="button"><span><a href="single.html" class="details">Details</a></span></div>
 				</div>
-				<div class="right-grid-bottom">
-					<div class="right-grid-bottom-left">
-						<h3>Deal of the Day</h3>
-						<p>Expires in 3:42:56</p>
-						<h5>Wireless Headphones</h5>
-						<h2>Extra 33% OFF</h2>
-						<a href="single.html">shop now<i class="go"></i></a>
+				<div class="grid_1_of_4 images_1_of_4">
+					<a href="single.html"><img src="images/new-pic2.jpg" alt="" /></a>
+					 <div class="discount">
+					 <span class="percentage">22%</span>
 					</div>
-					<div class="right-grid-bottom-right">
-						<img src="images/headset.png" alt="" />
-					</div>
-					<div class="clearfix"></div>
+					 <h2>Lorem Ipsum is simply </h2>
+					 <p><span class="strike">$667.22</span><span class="price">$621.75</span></p>
+				      <div class="button"><span><img src="images/cart.jpg" alt="" /><a href="single.html" class="cart-button">Add to Cart</a></span></div>
+				     <div class="button"><span><a href="single.html" class="details">Details</a></span></div>
 				</div>
-		   </div>
-		   <div class="clearfix"></div>
+				<div class="grid_1_of_4 images_1_of_4">
+					<a href="single.html"><img src="images/feature-pic2.jpg" alt="" /></a>
+					<div class="discount">
+					 <span class="percentage">55%</span>
+					</div>
+					 <h2>Lorem Ipsum is simply </h2>
+					 <p><span class="strike">$457.22</span><span class="price">$428.02</span></p>
+				      <div class="button"><span><img src="images/cart.jpg" alt="" /><a href="single.html" class="cart-button">Add to Cart</a></span> </div>
+				     <div class="button"><span><a href="single.html" class="details">Details</a></span></div>
+				</div>
+				<div class="grid_1_of_4 images_1_of_4">
+				 <a href="single.html"><img src="images/new-pic3.jpg" alt="" /></a>
+				  <div class="discount">
+					 <span class="percentage">66%</span>
+					</div>
+					 <h2>Lorem Ipsum is simply </h2>					 
+					 <p><span class="strike">$643.22</span><span class="price">$457.88</span></p>
+				      <div class="button"><span><img src="images/cart.jpg" alt="" /><a href="single.html" class="cart-button">Add to Cart</a></span> </div>
+				     <div class="button"><span><a href="single.html" class="details">Details</a></span></div>
+				</div>
+				<div class="clearfix"></div>
+			</div>
 		</div>
-		<div class="new-arrivals text-center">
-			<div class="col-md-3 new-arrival-head">
-				<h3>New Arrivals</h3>
-				<a class="btn btn-1 btn-1d" href="products.html">View All</a>
-			</div>
-			<div class="col-md-3 product-item">
-				<a href="products.html"><img src="images/watch.jpg" class="img-responsive" alt="" /></a>
-				<h3>Watches</h3>
-				<a href="single.html">Shop Now<i class="go"></i></a>
-			</div>
-			<div class="col-md-3 product-item">
-				<a href="products.html"><img src="images/men-jacket.jpg" class="img-responsive zoom-img" alt="" /></a>
-				<h3>jackets</h3>
-				<a href="single.html">Shop Now<i class="go"></i></a>
-			</div>
-			<div class="col-md-3 product-item">
-				<a href="products.html"><img src="images/shoes.jpg" class="img-responsive zoom-img" alt="" /></a>
-				<h3>Footwear</h3>
-				<a href="single.html">Shop Now<i class="go"></i></a>
-			</div>
-			<div class="clearfix"></div>
-		</div>
-		<div class="best-sellers">
-			<div class="best-sellers-head">
-				<h3>Bestsellers</h3>
-			</div>
-			<div class="best-sellers-menu">
-				<ul>
-					<li><a class="active" href="#">Electronics</a></li>
-					<li><a href="#">Fashion</a></li>
-					<li><a href="#">Books</a></li>
-					<li><a href="#">Other</a></li>
-				</ul>
-			</div>
-			<div class="clearfix"></div>
-		</div>
+	</div>
 		<div class="device">
 			<div class="course_demo">
 		          <ul id="flexiselDemo">	
@@ -359,94 +451,10 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 						</div>
 					</li>							    	  	       	   	  									    	  	       	   	    	
 				</ul>
-	  </div>
-	  </div>
-	  <div class="clients">
-		<div class="course_demo1">
-		          <ul id="flexiselDemo1">	
-					<li>
-						<div class="client">
-							<img src="images/c1.jpg" alt="" />
-						</div>
-					</li>
-					<li>
-					    <div class="client">
-							<img src="images/c2.jpg" alt="" />
-						</div>
-					</li>	
-					<li>
-					    <div class="client">
-							<img src="images/c4.jpg" alt="" />
-						</div>
-					</li>	
-					<li>
-					    <div class="client">
-							<img src="images/c3.jpg" alt="" />
-						</div>
-					</li>	
-					<li>
-						<div class="client">
-							<img src="images/c5.jpg" alt="" />
-						</div>
-					</li>	
-					<li>
-						<div class="client">
-							<img src="images/c6.jpg" alt="" />
-						</div>
-					</li>
-					<li>
-						<div class="client">
-							<img src="images/c7.jpg" alt="" />
-						</div>
-					</li>
-				</ul>
 			</div>
-			<link rel="stylesheet" href="css/flexslider.css" type="text/css" media="screen" />
-				<script type="text/javascript">
-			$(window).load(function() {
-				$("#flexiselDemo1").flexisel({
-					visibleItems: 7,
-					animationSpeed: 1000,
-					autoPlay: false,
-					autoPlaySpeed: 3000,    		
-					pauseOnHover: true,
-					enableResponsiveBreakpoints: true,
-			    	responsiveBreakpoints: { 
-			    		portrait: { 
-			    			changePoint:480,
-			    			visibleItems: 1
-			    		}, 
-			    		landscape: { 
-			    			changePoint:640,
-			    			visibleItems: 2
-			    		},
-			    		tablet: { 
-			    			changePoint:768,
-			    			visibleItems: 3
-			    		}
-			    	}
-			    });
-			    
-			});
-		</script>
-		<script type="text/javascript" src="js/jquery.flexisel.js"></script>
 		</div>
-		<div class="transport-grid">
-			<div class="col-md-4 shipping">
-				<h3><i class="shipping-icon"></i>Free Shipping</h3>
-				<p>Syphogrants called into the council chamber, and these are changed every day. It is a fundamental rule of their government,</p>
-			</div>
-			<div class="col-md-4 shipping">
-				<h3><i class="correct-icon"></i>100 % Original</h3>
-				<p>Syphogrants called into the council chamber, and these are changed every day. It is a fundamental rule of their government,</p>
-			</div>
-			<div class="col-md-4 return">
-				<h3><i class="return-icon"></i>Free Return</h3>
-				<p>Syphogrants called into the council chamber, and these are changed every day. It is a fundamental rule of their government,</p>
-			</div>
-			<div class="clearfix"></div>
 		</div>
-	  </div>
+	</div>
 	 <div class="footer">
 		<div class="wrap">
 			<div class="contact-section">
@@ -501,7 +509,7 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 					</ul>
 					<ul>
 						<li class="first"> boxshop </li> -
-						<li><a href="contact.html"> contact us </a></li> |
+						<li><a href=""> contact us </a></li> |
 						<li><a href=""> about us </a></li> |
 						<li><a href=""> careers </a></li> |
 						<li><a href=""> blog </a></li> |

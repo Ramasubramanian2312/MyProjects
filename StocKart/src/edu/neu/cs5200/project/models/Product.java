@@ -1,7 +1,10 @@
 package edu.neu.cs5200.project.models;
 
 import java.io.Serializable;
+
 import javax.persistence.*;
+
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 
 /**
@@ -9,6 +12,7 @@ import javax.persistence.*;
  * 
  */
 @Entity
+@JsonIgnoreProperties(ignoreUnknown=true)
 @NamedQuery(name="Product.findAll", query="SELECT p FROM Product p")
 public class Product implements Serializable {
 	private static final long serialVersionUID = 1L;
