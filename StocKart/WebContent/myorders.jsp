@@ -174,7 +174,7 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 						<%} %>
 						<li>
 							<i class="cart"></i>
-							<a href="#">Shopping Cart</a>
+							<a href="viewcart.jsp">Shopping Cart</a>
 						</li>
 					 <li class="last">
 						 <% if(session.getAttribute("username") == null) 

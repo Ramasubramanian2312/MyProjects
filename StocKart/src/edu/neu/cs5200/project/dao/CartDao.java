@@ -50,6 +50,16 @@ public class CartDao {
 		em.remove(cart);
 		em.getTransaction().commit(); 
 	}
+	
+	//remove All Items from Cart
+	public void clearCart(String username){
+		em.getTransaction().begin();
+		Query query = em.createQuery("Delete from Cart c where c.customerId = :username");
+		query.setParameter("username", username);
+		query.executeUpdate();
+		em.getTransaction().commit();
+		
+	}
     
     public Cart findCart(String itemId)
     {
@@ -89,7 +99,9 @@ public class CartDao {
 
 	public static void main(String[] args) {
 		CartDao c = new CartDao();
-		System.out.println(c.findAllItems("rama2312").get(0).getQuantity());
-		System.out.println(c.findCartTotal("rama2312"));
+/*		System.out.println(c.findAllItems("rama2312").get(0).getQuantity());
+		System.out.println(c.findCartTotal("rama2312"));*/
+/*		c.findCartTotal("abc");
+		c.clearCart("abc");*/
 	}
 }

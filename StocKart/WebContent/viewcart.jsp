@@ -84,10 +84,13 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 			function itemPresent() 
 			{alert("Item already added to cart.");}
 			
-			function updateQuantity(id,custId,pname,img,price)
-			{
+			
+			function updateQuantity(id,custId,img,price)
+			{				
 				var qtyid = "quantity".concat(id);
 				var qty = document.getElementById(qtyid).value;
+				var pnameid = "pname".concat(id);
+				var pname = document.getElementById(pnameid).value;
 				var cart = 
 					{
 						itemId: id,
@@ -100,6 +103,18 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 				updateCart(cart);
 				<% Thread.sleep(3000); %>
 				location.reload(true);
+			}
+			
+			
+			function updateQuantityTest(id,custId,img,price)
+			{
+				alert(id);
+				alert(custId);
+				var qtyid = "quantity".concat(id);
+				var qty = document.getElementById(qtyid).value;
+				alert(qty);
+				alert(img);
+				alert(price);
 			}
 			
 			function removeItem(id){
@@ -117,7 +132,7 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 	                                        contentType: "application/json",
 	                               success: function(response) {
 	                            	   	console.log(response);
-	                                      //alert("Cart updated");
+	                                      alert("Cart updated");
 	                               },
 	                               error: function(response) {
 	                                       console.log(response);
@@ -366,14 +381,22 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 					&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 					&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 					<a href="#" onClick='removeItem("<%=c.getItemId()%>")'>Remove From Cart</a>
-					<br><%=c.getName() %></td>
+					<br><%=c.getName() %>
+					</td>
 					<td><input id="quantity<%=c.getItemId()%>" type="text" size="1" value="<%=c.getQuantity() %>"/>
 					<br>
 					<br>
 					<div class="btn_form">
-					<form>
-					<input
-						type="submit" value="Update" onClick='updateQuantity("<%=c.getItemId()%>","<%=c.getCustomerId() %>","<%=c.getName() %>","<%=c.getThumbnailImage() %>","<%=c.getSalePrice() %>")'/></form></div></td>
+					 <form>
+					 <input type="hidden" id="pname<%=c.getItemId()%>" value="<%=c.getName()%>" />
+ 					<input
+						type="submit" value="Update" onClick="updateQuantity('<%=c.getItemId()%>','<%=c.getCustomerId() %>','<%=c.getThumbnailImage() %>','<%=c.getSalePrice() %>')"/>
+						<%-- ,"<%=c.getCustomerId() %>","<%=c.getName() %>","<%=c.getThumbnailImage() %>","<%=c.getSalePrice() %>")'/> --%>
+						<%-- <a href="#" onClick='updateQuantity("<%=c.getItemId()%>","<%=c.getCustomerId() %>","<%=c.getName() %>","<%=c.getThumbnailImage() %>","<%=c.getSalePrice() %>")'
+						>Update</a> --%>
+					</form>
+					</div>
+					</td>
 					    <%-- <button class="btn btn-primary" 
 						onClick='updateQuantity("<%=c.getItemId()%>","<%=c.getCustomerId() %>","<%=c.getName() %>","<%=c.getThumbnailImage() %>","<%=c.getSalePrice() %>")' value="Change">Update</button></td> --%>
 					<td>$<%=c.getSalePrice() %></td>

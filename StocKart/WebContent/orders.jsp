@@ -186,6 +186,7 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 							cdao.createCartItem(cart);	
 						}
 						
+						
 					}
 			 		if("addorder".equals(action))
 					{
@@ -204,6 +205,9 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 							detail.setSalePrice(cartlist.get(i).getSalePrice());
 							odao.addOrderdetail(orderId, detail);
 						}
+						cdao.clearCart(session.getAttribute("username").toString());%>
+						<script>alert("Order placed successfully!")</script>
+						<% response.sendRedirect("index.jsp");
 					}
 				}
 				else
@@ -420,7 +424,7 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 						<div class="btn_form">
 						<form action="orders.jsp">
 						<input type="hidden" name="totalprice" value="<%=cdao.findCartTotal(session.getAttribute("username").toString()) %>"/>
-						<button name="action" value="addorder" type="submit" class="btn primary">Make Payment</button>
+						<button name="action" value="addorder" type="submit" class="btn primary">Place Order</button>
 						</form>
 						</div>
 					</td>
