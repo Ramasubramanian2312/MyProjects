@@ -1291,26 +1291,19 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 		<div class="wrap">
 			<div class="contact-section">
 				<div class="col-md-4 follow text-left">
-					<h3>Follow Us</h3>
-					<p>Lorem ipsum dolor sit amet</p>
+					<h3></h3>
+					<p></p>
 					<div class="social-icons">
-						<i class="twitter"></i>
-						<i class="facebook"></i>
-						<i class="googlepluse"></i>
-						<i class="pinterest"></i>
-						<i class="linkedin"></i>
 					</div>
 				</div>
 				<div class="col-md-4 subscribe text-left">
-					<h3>Subscribe Us</h3>
-					<p>Get the latest updates & Offers right in your inbox.</p>
-					<input type="text" class="text" value="" onfocus="this.value = '';" onblur="if (this.value == '') {this.value = '';}">
-					<input type="submit" value="Subscribe">
+					<h3></h3>
+					<p></p>
 				</div>
 				<div class="col-md-4 help text-right">
 					<h3>Need Help?</h3>
-					<p>Lorem ipsum dolor sit amet</p>
-					<a href="contact.html">Contact us</a>
+					<p></p>
+					<a href="contact.jsp">Contact us</a>
 				</div>
 				<div class="clearfix"></div>
 			</div>

@@ -35,6 +35,8 @@ public class Product implements Serializable {
 	private String shortDescription;
 
 	private String thumbnailImage;
+	
+	private String largeImage;
 
 	public Product() {
 	}
@@ -109,6 +111,14 @@ public class Product implements Serializable {
 
 	public void setThumbnailImage(String thumbnailImage) {
 		this.thumbnailImage = thumbnailImage;
+	}
+
+	public String getLargeImage() {
+		return largeImage;
+	}
+
+	public void setLargeImage(String largeImage) {
+		this.largeImage = largeImage;
 	}
 
 }

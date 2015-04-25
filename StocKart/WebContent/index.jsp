@@ -7,7 +7,10 @@ License URL: http://creativecommons.org/licenses/by/3.0/
 <%@page import="edu.neu.cs5200.project.dao.CartDao"%>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
 	pageEncoding="ISO-8859-1" import="edu.neu.cs5200.project.rest.client.*"
-	import="java.util.*"%>
+	import="java.util.*"
+	import="edu.neu.cs5200.project.dao.*"
+	import="edu.neu.cs5200.project.models.*"
+	import="edu.neu.cs5200.project.rest.client.*"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -78,21 +81,23 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 	<!-- header-section-starts -->
 	<%
 	CartDao cdao = new CartDao();
+	ShoppingRestClient client = new ShoppingRestClient();
+	Deal deal = client.findDealOftheDay();
 	%>
 	<div class="header">
 		<div class="top-header">
 			<div class="wrap">
 				<div class="header-left">
 					<ul>
-						<li><a href="#">24x7 Customer Care  </a></li> |
-						<li><a href="order.html"> Track Order</a></li>
+						<li><a href="#"></a></li>
+						<li><a href="order.html"></a></li>
 					</ul>
 				</div>
 				<div class="header-right">
 					<ul>
 						<li>
 							<i class="user"></i>
-							<a href="account.jsp">My Account</a>
+							<a href="register.jsp">My Account</a>
 						</li>
 						<% if(session.getAttribute("username") == null) 
 							{ %>
@@ -105,7 +110,9 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 							{ %>
 						<li class="login">
 							<a href=# >Welcome <%= session.getAttribute( "username" ) %></a>
-						</li>
+							<span></span>
+							<a href="myorders.jsp">My Orders</a>
+						</li>				
 						<%} %>
 						<li>
 							<i class="cart"></i>
@@ -156,29 +163,29 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 			<div class="top-menu">
 				<!-- start header menu -->
 				<ul class="megamenu skyblue">
-			<li><a class="color1" href="#">mobiles</a>		
+			<li><a class="color1" href="products.jsp?search=cellphones">mobiles</a>		
 			</li>
-			<li class="grid"><a class="color2" href="#">tablets</a>
+			<li class="grid"><a class="color2" href="products.jsp?search=tablets">tablets</a>
 				</li>
-			<li class="grid"><a class="color4" href="#">laptops</a>				
+			<li class="grid"><a class="color4" href="products.jsp?search=laptops">laptops</a>				
 				</li>				
-				<li><a class="color5" href="#">cameras</a>
+				<li><a class="color5" href="products.jsp?search=cameras">cameras</a>
 				</li>
-				<li><a class="color6" href="#">watches</a>
+				<li><a class="color6" href="products.jsp?search=watches">watches</a>
 				</li>
-				<li><a class="color8" href="#">eBooks</a>
+				<li><a class="color8" href="products.jsp?search=eBooks">eBooks</a>
 				</li>
-				<li><a class="color9" href="#">T-shirts</a>				
+				<li><a class="color9" href="products.jsp?search=T-shirts">T-shirts</a>				
 				</li>
-				<li><a class="color5" href="#">sarees</a>
+				<li><a class="color5" href="products.jsp?search=sarees">sarees</a>
 				</li>
-				<li><a class="color1" href="#">jeans</a>
+				<li><a class="color1" href="products.jsp?search=jeans">jeans</a>
 				</li>
-				<li><a class="color10" href="#">perfumes</a>			
+				<li><a class="color10" href="products.jsp?search=perfumes">perfumes</a>			
 				</li>
-				<li><a class="color2" href="#">sofas</a>
+				<li><a class="color2" href="products.jsp?search=sofas">sofas</a>
 				</li>
-				<li><a class="color6" href="#">sunglasses</a>
+				<li><a class="color6" href="products.jsp?search=sunglasses">sunglasses</a>
 				</li>
 		 </ul> 
 	</div>
@@ -219,20 +226,20 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 						<span>upto</span>
 						<h2>50%</h2>
 						<p>OFF</p>
-						<a href="#">shop now<i class="go"></i></a>
+						<a href="products.jsp?search=winter sale">shop now<i class="go"></i></a>
 					</div>
 					<div class="clearfix"></div>
 				</div>
 				<div class="right-grid-bottom">
 					<div class="right-grid-bottom-left">
-						<h3>Deal of the Day</h3>
-						<p>Expires in 3:42:56</p>
-						<h5>Wireless Headphones</h5>
-						<h2>Extra 33% OFF</h2>
-						<a href="single.html">shop now<i class="go"></i></a>
+						<h3>Exclusive Offer</h3>
+						<p>Value of the Day</p>
+						<h5><%=deal.getName()%></h5>
+						<h2></h2>
+						<a href="details.jsp?id=<%=deal.getItemId()%>">shop now<i class="go"></i></a>
 					</div>
 					<div class="right-grid-bottom-right">
-						<img src="images/headset.png" alt="" />
+						<img src="<%=deal.getLargeImage()%>" alt="" />
 					</div>
 					<div class="clearfix"></div>
 				</div>
@@ -242,22 +249,21 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 		<div class="new-arrivals text-center">
 			<div class="col-md-3 new-arrival-head">
 				<h3>New Arrivals</h3>
-				<a class="btn btn-1 btn-1d" href="products.html">View All</a>
 			</div>
 			<div class="col-md-3 product-item">
-				<a href="products.html"><img src="images/watch.jpg" class="img-responsive" alt="" /></a>
+				<a href="products.jsp?search=watch"><img src="images/watch.jpg" class="img-responsive" alt="" /></a>
 				<h3>Watches</h3>
-				<a href="single.html">Shop Now<i class="go"></i></a>
+				<a href="products.jsp?search=watch">Shop Now<i class="go"></i></a>
 			</div>
 			<div class="col-md-3 product-item">
-				<a href="products.html"><img src="images/men-jacket.jpg" class="img-responsive zoom-img" alt="" /></a>
+				<a href="products.jsp?search=jacket"><img src="images/men-jacket.jpg" class="img-responsive zoom-img" alt="" /></a>
 				<h3>jackets</h3>
-				<a href="single.html">Shop Now<i class="go"></i></a>
+				<a href="products.jsp?search=jacket">Shop Now<i class="go"></i></a>
 			</div>
 			<div class="col-md-3 product-item">
-				<a href="products.html"><img src="images/shoes.jpg" class="img-responsive zoom-img" alt="" /></a>
+				<a href="products.jsp?search=Footwear"><img src="images/shoes.jpg" class="img-responsive zoom-img" alt="" /></a>
 				<h3>Footwear</h3>
-				<a href="single.html">Shop Now<i class="go"></i></a>
+				<a href="products.jsp?search=Footwear">Shop Now<i class="go"></i></a>
 			</div>
 			<div class="clearfix"></div>
 		</div>
@@ -267,101 +273,15 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 			</div>
 			<div class="best-sellers-menu">
 				<ul>
-					<li><a class="active" href="#">Electronics</a></li>
-					<li><a href="#">Fashion</a></li>
-					<li><a href="#">Books</a></li>
-					<li><a href="#">Other</a></li>
+					<li><a class="active" href="products.jsp?search=Electronics">Electronics</a></li>
+					<li><a href="products.jsp?search=T-Shirt">Fashion</a></li>
+					<li><a href="products.jsp?search=Books">Books</a></li>
+					<li><a href="products.jsp?search=Other">Other</a></li>
 				</ul>
 			</div>
 			<div class="clearfix"></div>
 		</div>
-		<div class="device">
-			<div class="course_demo">
-		          <ul id="flexiselDemo">	
-					<li>
-						<div class="ipad text-center">
-							<img src="images/phone.jpg" alt="" />
-							<h4>Ipad Mini</h4>
-							<h3>$499</h3>
-							<ul>
-								<li><i class="cart-1"></i></li>
-								<li><a class="cart" href="#">Add To Cart</a></li>
-							</ul>
-							<div class="clearfix"></div>
-							<ul>
-								<li><i class="heart"></i></li>
-								<li><a class="cart" href="#">Add To Wishlist</a></li>
-							</ul>
-						</div>
-					</li>
-					<li>
-					<div class="ipad text-center">
-							<img src="images/phone1.jpg" alt="" />
-							<h4>Ipad Mini</h4>
-							<h3>$499</h3>
-							<ul>
-								<li><i class="cart-1"></i></li>
-								<li><a class="cart" href="#">Add To Cart</a></li>
-							</ul>
-							<div class="clearfix"></div>
-							<ul>
-								<li><i class="heart"></i></li>
-								<li><a class="cart" href="#">Add To Wishlist</a></li>
-							</ul>
-						</div>
-					</li>	
-					<li>
-					<div class="ipad text-center">
-							<img src="images/phone2.jpg" alt="" />
-							<h4>Ipad Mini</h4>
-							<h3>$499</h3>
-							<ul>
-								<li><i class="cart-1"></i></li>
-								<li><a class="cart" href="#">Add To Cart</a></li>
-							</ul>
-							<div class="clearfix"></div>
-							<ul>
-								<li><i class="heart"></i></li>
-								<li><a class="cart" href="#">Add To Wishlist</a></li>
-							</ul>
-						</div>
-					</li>	
-					<li>
-					<div class="ipad text-center">
-							<img src="images/phone3.jpg" alt="" />
-							<h4>Ipad Mini</h4>
-							<h3>$499</h3>
-							<ul>
-								<li><i class="cart-1"></i></li>
-								<li><a class="cart" href="#">Add To Cart</a></li>
-							</ul>
-							<div class="clearfix"></div>
-							<ul>
-								<li><i class="heart"></i></li>
-								<li><a class="cart" href="#">Add To Wishlist</a></li>
-							</ul>
-						</div>
-					</li>	
-					<li>
-					<div class="ipad text-center">
-							<img src="images/phone4.jpg" alt="" />
-							<h4>Ipad Mini</h4>
-							<h3>$499</h3>
-							<ul>
-								<li><i class="cart-1"></i></li>
-								<li><a class="cart" href="#">Add To Cart</a></li>
-							</ul>
-							<div class="clearfix"></div>
-							<ul>
-								<li><i class="heart"></i></li>
-								<li><a class="cart" href="#">Add To Wishlist</a></li>
-							</ul>
-						</div>
-					</li>							    	  	       	   	  									    	  	       	   	    	
-				</ul>
-	  </div>
-	  </div>
-	  <div class="clients">
+		<div class="clients">
 		<div class="course_demo1">
 		          <ul id="flexiselDemo1">	
 					<li>
@@ -451,68 +371,25 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 		<div class="wrap">
 			<div class="contact-section">
 				<div class="col-md-4 follow text-left">
-					<h3>Follow Us</h3>
-					<p>Lorem ipsum dolor sit amet</p>
+					<h3></h3>
+					<p></p>
 					<div class="social-icons">
-						<i class="twitter"></i>
-						<i class="facebook"></i>
-						<i class="googlepluse"></i>
-						<i class="pinterest"></i>
-						<i class="linkedin"></i>
 					</div>
 				</div>
 				<div class="col-md-4 subscribe text-left">
-					<h3>Subscribe Us</h3>
-					<p>Get the latest updates & Offers right in your inbox.</p>
-					<input type="text" class="text" value="" onfocus="this.value = '';" onblur="if (this.value == '') {this.value = '';}">
-					<input type="submit" value="Subscribe">
+					<h3></h3>
+					<p></p>
 				</div>
 				<div class="col-md-4 help text-right">
 					<h3>Need Help?</h3>
-					<p>Lorem ipsum dolor sit amet</p>
-					<a href="contact.html">Contact us</a>
+					<p></p>
+					<a href="contact.jsp">Contact us</a>
 				</div>
 				<div class="clearfix"></div>
 			</div>
 			<div class="footer-middle">
 				<div class="col-md-6 different-products">
-					<ul>
-						<li class="first"> Shop </li> -
-						<li><a href=""> Mobiles </a></li> |
-						<li><a href=""> Laptops </a></li> |
-						<li><a href=""> Cameras </a></li> |
-						<li><a href=""> Clothing </a></li> |
-						<li><a href=""> Footwear </a></li> |
-						<li><a href=""> Jewellery </a></li> 
-					</ul>
-					<ul>
-						<li class="first"> Help </li> -
-						<li><a href=""> Faqs </a></li> |
-						<li><a href=""> shipping </a></li> |
-						<li><a href=""> payments </a></li> |
-						<li><a href=""> cancellation&returns </a></li> 
-					</ul>
-					<ul>
-						<li class="first"> account <li> -
-						<li><a href=""> log in </a></li> |
-						<li><a href=""> sign up </a></li> |
-						<li><a href=""> My WhishList </a></li> |
-						<li><a href=""> My cart </a></li> 
-					</ul>
-					<ul>
-						<li class="first"> boxshop </li> -
-						<li><a href="contact.html"> contact us </a></li> |
-						<li><a href=""> about us </a></li> |
-						<li><a href=""> careers </a></li> |
-						<li><a href=""> blog </a></li> |
-						<li><a href=""> press </a></li>
-					</ul>
-					<ul>
-						<li class="first"> policies</li> -
-						<li><a href=""> terms of use </a></li> |
-						<li><a href=""> security </a></li> |
-						<li><a href=""> privacy policy</a></li>
-					</ul>
+
 				</div>
 				<div class="col-md-6 about-text text-right">
 					<h4>About BoxShop</h4>

@@ -81,6 +81,7 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 </head>
 <body>
 	<!-- header-section-starts -->
+	<% CartDao cdao = new CartDao(); %>
 		<script>
 			function itemPresent() 
 			{alert("Item already added to cart.");}
@@ -143,85 +144,6 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 			}
 			
 		</script>
-		<%
-			String itemId = null;
-			String action = null;
-			Product product = null;
-			double price = 0;
-			CartDao cdao = new CartDao();
-			UserDAO udao = new UserDAO();
-			OrderDao odao = new OrderDao();
-			String priceStr = request.getParameter("totalprice");
-			if(priceStr!=null)
-			price = Double.valueOf(request.getParameter("totalprice"));
-			Map<String, String> messages = new HashMap<String, String>();
-			action = request.getParameter("action");
-			itemId = request.getParameter("itemId");
-			ShoppingRestClient client = new ShoppingRestClient();
-			if(action!=null)
-			{
-
-				if(session.getAttribute("username")!=null)
-				{
-
-					if("create".equals(action))
-					{	
-
-						Cart cart = new Cart();
-						product = client.findProductById(itemId);
-						cart.setItemId(product.getItemId()+"");
-						cart.setCustomerId(session.getAttribute("username").toString());
-						cart.setName(product.getName());
-						cart.setThumbnailImage(product.getThumbnailImage());
-						cart.setSalePrice(product.getSalePrice());
-						
-						if(cdao.findCart(itemId) != null)
-						{
-							%>
-							<script>itemPresent();</script>
-							<%
-						}
-						else
-						{
-							cdao.createCartItem(cart);	
-						}
-						
-					}
-			 		if("addorder".equals(action))
-					{
-						Order order = new Order(null,new Date(),"new",price,null,null);
-						int orderId = udao.addOrder(session.getAttribute("username").toString(), order);
-						System.out.println(orderId);
-						//List<Orderdetail> lod = new ArrayList<Orderdetail>();
-						List<Cart> cartlist = cdao.findAllItems(session.getAttribute("username").toString());
-						for(int i=0;i<cartlist.size();i++){
-							Orderdetail detail = new Orderdetail();
-							detail.setOrderDetailId(null);
-							detail.setItemId(cartlist.get(i).getItemId());
-							detail.setQuantity(cartlist.get(i).getQuantity());
-							detail.setName(cartlist.get(i).getName());
-							detail.setThumbnailImage(cartlist.get(i).getThumbnailImage());
-							detail.setSalePrice(cartlist.get(i).getSalePrice());
-							odao.addOrderdetail(orderId, detail);
-						}
-					}
-				}
-				else
-				{
-					%>
-					<jsp:forward page="login.jsp" />
-					<%
-				}
-			}
-			String searchText = request.getParameter("search");
-			List<Product> i = new ArrayList<Product>();
-			if(searchText!=null){				
-				Products products = client.findProductByName(searchText);
-				if(products!=null)
-				i = products.getItems();
-			}
-
-		%>
 	<div class="header">
 		<div class="top-header">
 			<div class="wrap">
@@ -334,39 +256,33 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
     		</div>
     		<div class="clearfix"></div>
     	</div>
-	      		<%	for (int j=0; j<i.size() ; j++) {
-	      			if((j % 4) == 0)
-	      		%>
-	      		<div class="section group">
-				<div class="grid_1_of_4 images_1_of_4">
-					 <a href="single.html"><img src="<%=i.get(j).getThumbnailImage() %>" alt="" /></a>
-					 <h2><%=i.get(j).getName() %></h2>
-					 <p><img src="<%= i.get(j).getCustomerRatingImage() %>" alt="" /></p>
-					 <%-- <h2><%=i.get(j).getCustomerRating() %></h2> --%>
-					 <%-- <p><%=i.get(j).getShortDescription() %></p> --%>
-					 <p><span class="price">$<%= i.get(j).getSalePrice() %></span></p>
-					 <form action="products.jsp" onsubmit="return validItem();">
-					 	<input type="hidden" name="itemId" value="<%= i.get(j).getItemId() %>" />
-					 	<input type="hidden" name="search" value="<%= searchText %>" />
-					 	<span><button class="btn button" name="action" value="create">AddToCart</button></span>
-					 </form>
-				     <div class="button"><span><a href="single.html" class="details">Details</a></span></div>
-				</div>
-				<%
-				if((j % 4) == 0)
-					%>
-					</div>
-					<%
-					}
-				%>
 				<div class="clearfix">
 			</div>
 				<div class="sectiongroup">
+	<% 
+	Userbean usr = new Userbean();
+	UserDAO udao = new UserDAO();									 
+	usr.setUsername(session.getAttribute("username").toString());
 	
-			<table cellspacing='0'> <!-- cellspacing='0' is important, must stay -->
+	List<Order> lodr = new ArrayList<Order>();
+	
+	usr = udao.getUname(usr);
+	
+	lodr = usr.getOrders();
+	
+	for(Order odr : lodr)
+	{								 
+	%>
+	<p></p> 
+	<table cellspacing='0'> <!-- cellspacing='0' is important, must stay -->
 
 	<!-- Table Header -->
 	<thead>
+	<tr> 
+	<th colspan=5>
+	  Order Date: <%=new SimpleDateFormat("MM-dd-yyyy").format(odr.getOrderDate())%> 
+	</th>
+	</tr>
 		<tr>
 			<th>ITEM</th>
 			<th>QTY</th>
@@ -384,17 +300,18 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 			
 		</tr><!-- Table Row -->
 		<%
-					List<Cart> clist = cdao.findAllItems(session.getAttribute("username").toString());
-					for(Cart c : clist){
+					List<Orderdetail> ldet = new ArrayList<Orderdetail>();
+					ldet = odr.getOrderdetails();
+					for(Orderdetail det : ldet){
 				%>
 				<tr>
-					<td><img src="<%=c.getThumbnailImage()%>" />
+					<td><img src="<%=det.getThumbnailImage()%>" />
 					&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 					&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 					&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 					<%-- <a href="#" onClick='removeItem("<%=c.getItemId()%>")'>Remove From Cart</a> --%>
-					<br><%=c.getName() %></td>
-					<td><input id="quantity<%=c.getItemId()%>" type="text" size="1" value="<%=c.getQuantity() %>" readonly/>
+					<br><%=det.getName() %></td>
+					<td><input id="quantity<%=det.getItemId()%>" type="text" size="1" value="<%=det.getQuantity() %>" readonly/>
 <%-- 					<br>
 					<br>
 					<div class="btn_form">
@@ -405,9 +322,9 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 					</form>
 					</div> --%>
 					</td>
-					<td>$<%=c.getSalePrice() %></td>
+					<td>$<%=det.getSalePrice() %></td>
 					<td>Delivery Details</td>
-					<td>$<%=c.getSalePrice()*c.getQuantity() %></td>
+					<td>$<%=det.getSalePrice()*det.getQuantity() %></td>
 					
 				</tr>
 
@@ -415,13 +332,13 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 					}
 				%>
 				<tr>
-					<td colspan="4" align="right"><h1>Payable Amount: $<%=cdao.findCartTotal(session.getAttribute("username").toString()) %></h1></td>
+					<td colspan="4" align="right"><h1>Order Amount $<%=odr.getTotalPrice()%></h1></td>
 					<td colspan="1">
 						<div class="btn_form">
-						<form action="orders.jsp">
+						<%-- <form action="orders.jsp">
 						<input type="hidden" name="totalprice" value="<%=cdao.findCartTotal(session.getAttribute("username").toString()) %>"/>
 						<button name="action" value="addorder" type="submit" class="btn primary">Make Payment</button>
-						</form>
+						</form> --%>
 						</div>
 					</td>
 				</tr>
@@ -429,6 +346,7 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 	<!-- Table Body -->
 
 </table>
+<%} %>
 		</div>
 			</div>
 					

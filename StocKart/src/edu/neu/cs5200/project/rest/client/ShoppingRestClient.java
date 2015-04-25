@@ -14,8 +14,10 @@ import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import edu.neu.cs5200.project.models.Deal;
 import edu.neu.cs5200.project.models.Product;
 import edu.neu.cs5200.project.models.Products;
+import edu.neu.cs5200.project.models.ReviewItem;
 
 
 
@@ -23,8 +25,57 @@ public class ShoppingRestClient {
 
 	private final String FIND_PRODUCT_BY_NAME = "http://api.walmartlabs.com/v1/search?query=PRODUCT_NAME&format=json&apiKey=tcj5s7s29yjvm2mmqjkgzpjt";
 	private final String FIND_PRODUCT_BY_ID = "http://api.walmartlabs.com/v1/items/PRODUCT_ID?format=json&apiKey=tcj5s7s29yjvm2mmqjkgzpjt";
+	private final String FIND_REVIEW_BY_ID = "http://api.walmartlabs.com/v1/reviews/PRODUCT_ID?format=json&apiKey=tcj5s7s29yjvm2mmqjkgzpjt";
+	private final String FIND_DEAL_OF_THE_DAY = "http://api.walmartlabs.com/v1/vod?format=json&apiKey=tcj5s7s29yjvm2mmqjkgzpjt";
 	
-
+	public Deal findDealOftheDay()
+	{
+		String urlStr = FIND_DEAL_OF_THE_DAY;
+		
+		Deal deal = new Deal();		
+		ObjectMapper mapper = new ObjectMapper();
+		String json = getJsonStringForUrl(urlStr);
+		try {
+			deal = mapper.readValue(json, Deal.class);
+		} catch (JsonParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (JsonMappingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		return deal;
+	}
+	
+	public ReviewItem findReviewById(String id)
+	{
+		String urlStr = FIND_REVIEW_BY_ID.replace("PRODUCT_ID", id);
+		
+		ReviewItem revs = new ReviewItem();
+		//Reviews rev = new Reviews();
+		
+		ObjectMapper mapper = new ObjectMapper();
+		String json = getJsonStringForUrl(urlStr);
+		try {
+			revs = mapper.readValue(json, ReviewItem.class);
+		} catch (JsonParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (JsonMappingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		return revs;
+	}
+	
 	public Product findProductById(String id)
 	{
 		String urlStr = FIND_PRODUCT_BY_ID.replace("PRODUCT_ID", id);

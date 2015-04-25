@@ -1,8 +1,9 @@
 package edu.neu.cs5200.project.models;
 
 import java.io.Serializable;
-import javax.persistence.*;
 import java.util.List;
+
+import javax.persistence.*;
 
 
 /**
@@ -25,6 +26,10 @@ public class Userbean implements Serializable {
 	@Column(nullable=false, length=45)
 	private String password;
 
+	//bi-directional one-to-one association to Custinfo
+	@OneToOne(mappedBy="userbean", cascade=CascadeType.MERGE)
+	private Custinfo custinfo;
+	
 	//bi-directional many-to-one association to Order
 	@OneToMany(mappedBy="userbean")
 	private List<Order> orders;
@@ -56,8 +61,17 @@ public class Userbean implements Serializable {
 		this.password = password;
 	}
 
+	public Custinfo getCustinfo() {
+		return this.custinfo;
+	}
+
+	public void setCustinfo(Custinfo custinfo) {
+		this.custinfo = custinfo;
+	}
+	
+	
 	public List<Order> getOrders() {
-		return this.orders;
+		return orders;
 	}
 
 	public void setOrders(List<Order> orders) {
@@ -65,17 +79,19 @@ public class Userbean implements Serializable {
 	}
 
 	public Order addOrder(Order order) {
-		getOrders().add(order);
-		order.setUserbean(this);
+	getOrders().add(order);
+	order.setUserbean(this);
 
-		return order;
-	}
+	return order;
+}
 
 	public Order removeOrder(Order order) {
-		getOrders().remove(order);
-		order.setUserbean(null);
+	getOrders().remove(order);
+	order.setUserbean(null);
 
-		return order;
+	return order;
 	}
+
+
 
 }

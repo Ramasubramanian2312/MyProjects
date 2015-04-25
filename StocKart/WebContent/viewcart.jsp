@@ -98,6 +98,7 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 						salePrice: price
 					};
 				updateCart(cart);
+				<% Thread.sleep(3000); %>
 				location.reload(true);
 			}
 			
@@ -133,7 +134,8 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
                              contentType: "application/json",
                     success: function(response) {
                     		console.log(response);
-                           //alert("Item Removed from Cart");
+                    		<% Thread.sleep(3000); %>
+                             //alert("Item Removed from Cart");
                     },
                     error: function(response) {
                             console.log(response);
@@ -199,15 +201,14 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 			<div class="wrap">
 				<div class="header-left">
 					<ul>
-						<li><a href="#">24x7 Customer Care  </a></li> |
-						<li><a href="order.html"> Track Order</a></li>
+					<li><a href="order.html"></a></li>
 					</ul>
 				</div>
 				<div class="header-right">
 					<ul>
 						<li>
 							<i class="user"></i>
-							<a href="account.jsp">My Account</a>
+							<a href="register.jsp">My Account</a>
 						</li>
 						<% if(session.getAttribute("username") == null) 
 							{ %>
@@ -270,33 +271,32 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 			<h4>Most Popular<i class="arrow"></i></h4>
 			<div class="top-menu">
 				<!-- start header menu -->
-				<ul class="megamenu skyblue">
-			<li><a class="color1" href="#">mobiles</a>		
+<ul class="megamenu skyblue">
+			<li><a class="color1" href="products.jsp?search=cellphones">mobiles</a>		
 			</li>
-			<li class="grid"><a class="color2" href="#">tablets</a>
+			<li class="grid"><a class="color2" href="products.jsp?search=tablets">tablets</a>
 				</li>
-			<li class="grid"><a class="color4" href="#">laptops</a>				
+			<li class="grid"><a class="color4" href="products.jsp?search=laptops">laptops</a>				
 				</li>				
-				<li><a class="color5" href="#">cameras</a>
+				<li><a class="color5" href="products.jsp?search=cameras">cameras</a>
 				</li>
-				<li><a class="color6" href="#">watches</a>
+				<li><a class="color6" href="products.jsp?search=watches">watches</a>
 				</li>
-				<li><a class="color8" href="#">eBooks</a>
+				<li><a class="color8" href="products.jsp?search=eBooks">eBooks</a>
 				</li>
-				<li><a class="color9" href="#">T-shirts</a>				
+				<li><a class="color9" href="products.jsp?search=T-shirts">T-shirts</a>				
 				</li>
-				<li><a class="color5" href="#">sarees</a>
+				<li><a class="color5" href="products.jsp?search=sarees">sarees</a>
 				</li>
-				<li><a class="color1" href="#">jeans</a>
+				<li><a class="color1" href="products.jsp?search=jeans">jeans</a>
 				</li>
-				<li><a class="color10" href="#">perfumes</a>			
+				<li><a class="color10" href="products.jsp?search=perfumes">perfumes</a>			
 				</li>
-				<li><a class="color2" href="#">sofas</a>
+				<li><a class="color2" href="products.jsp?search=sofas">sofas</a>
 				</li>
-				<li><a class="color6" href="#">sunglasses</a>
+				<li><a class="color6" href="products.jsp?search=sunglasses">sunglasses</a>
 				</li>
-		 </ul> 
-	</div>
+		 </ul> 	</div>
 		<div class="clearfix"></div>
 		</div>
 		<div class="main">
@@ -390,7 +390,7 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 					<td colspan="1">
 						<div class="btn_form">
 						<form>
-						<input type="submit" value="Checkout"/>
+						<button class="btn default"><a href="orders.jsp">CheckOut</a></button>
 						</form>
 						</div>
 					</td>

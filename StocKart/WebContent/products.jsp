@@ -140,15 +140,15 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 			<div class="wrap">
 				<div class="header-left">
 					<ul>
-						<li><a href="#">24x7 Customer Care  </a></li> |
-						<li><a href="order.html"> Track Order</a></li>
+						<li><a href="#"></a></li>
+						<li><a href="order.html"></a></li>
 					</ul>
 				</div>
 				<div class="header-right">
 					<ul>
 						<li>
 							<i class="user"></i>
-							<a href="account.jsp">My Account</a>
+							<a href="register.jsp">My Account</a>
 						</li>
 						<% if(session.getAttribute("username") == null) 
 							{ %>
@@ -211,6 +211,32 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 			<h4>Most Popular<i class="arrow"></i></h4>
 			<div class="top-menu">
 				<!-- start header menu -->
+				<ul class="megamenu skyblue">
+			<li><a class="color1" href="products.jsp?search=cellphones">mobiles</a>		
+			</li>
+			<li class="grid"><a class="color2" href="products.jsp?search=tablets">tablets</a>
+				</li>
+			<li class="grid"><a class="color4" href="products.jsp?search=laptops">laptops</a>				
+				</li>				
+				<li><a class="color5" href="products.jsp?search=cameras">cameras</a>
+				</li>
+				<li><a class="color6" href="products.jsp?search=watches">watches</a>
+				</li>
+				<li><a class="color8" href="products.jsp?search=eBooks">eBooks</a>
+				</li>
+				<li><a class="color9" href="products.jsp?search=T-shirts">T-shirts</a>				
+				</li>
+				<li><a class="color5" href="products.jsp?search=sarees">sarees</a>
+				</li>
+				<li><a class="color1" href="products.jsp?search=jeans">jeans</a>
+				</li>
+				<li><a class="color10" href="products.jsp?search=perfumes">perfumes</a>			
+				</li>
+				<li><a class="color2" href="products.jsp?search=sofas">sofas</a>
+				</li>
+				<li><a class="color6" href="products.jsp?search=sunglasses">sunglasses</a>
+				</li>
+		 </ul> 
 	</div>
 		<div class="clearfix"></div>
 		</div>
@@ -245,12 +271,7 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
     		</p>
     		</div>
     		<div class="page-no">
-    			<p>Result Pages:<ul>
-    				<li><a href="#">1</a></li>
-    				<li class="active"><a href="#">2</a></li>
-    				<li><a href="#">3</a></li>
-    				<li>[<a href="#"> Next>>></a >]</li>
-    				</ul></p>
+    			<p></p>
     		</div>
     		<div class="clearfix"></div>
     	</div>
@@ -260,18 +281,23 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 	      		%>
 	      		<div class="section group">
 				<div class="grid_1_of_4 images_1_of_4">
-					 <a href="single.html"><img src="<%= i.get(j).getThumbnailImage() %>" alt="" /></a>
+					 <a href="details.jsp?id=<%=i.get(j).getItemId() %>"><img src="<%= i.get(j).getThumbnailImage() %>" alt="" /></a>
 					 <h2><%=i.get(j).getName() %></h2>
-					 <p><img src="<%= i.get(j).getCustomerRatingImage() %>" alt="" /></p>
-					 <%-- <h2><%=i.get(j).getCustomerRating() %></h2> --%>
-					 <%-- <p><%=i.get(j).getShortDescription() %></p> --%>
+					 <p>
+					 	<%
+					 	if(i.get(j).getCustomerRatingImage()!=null){%>
+					 	<img src="<%= i.get(j).getCustomerRatingImage() %>" alt="" />
+					 	<%}%>
+					 </p>
 					 <p><span class="price">$<%= i.get(j).getSalePrice() %></span></p>
 					 <form action="products.jsp" onsubmit="return validItem();">
 					 	<input type="hidden" name="itemId" value="<%= i.get(j).getItemId() %>" />
 					 	<input type="hidden" name="search" value="<%= searchText %>" />
-					 	<span><button class="btn button" name="action" value="create">AddToCart</button></span>
+<!-- 					 	<ul>
+					 	<li><i class="cart-1"></i></li></ul> -->
+					 	<button class="btn button" name="action" value="create">AddToCart</button>
 					 </form>
-				     <div class="button"><span><a href="single.html" class="details">Details</a></span></div>
+				     <div class="button"><span><a href="details.jsp?id=<%=i.get(j).getItemId() %>" class="details">Details</a></span></div>
 				</div>
 				<%
 				if((j % 4) == 0)
@@ -284,244 +310,33 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 			</div>
 				
 			</div>
-			<div class="content_bottom">
-    		<div class="heading">
-    		<h3>New Products</h3>
-    		</div>
-    		<div class="sort">
-    		<p>Sort by:
-    			<select>
-    				<option>Lowest Price</option>
-    				<option>Highest Price</option>
-    				<option>Lowest Price</option>
-    				<option>Lowest Price</option>
-    				<option>Lowest Price</option>
-    				<option>In Stock</option>  				   				
-    			</select>
-    		</p>
-    		</div>
-    		<div class="show">
-    		<p>Show:
-    			<select>
-    				<option>4</option>
-    				<option>8</option>
-    				<option>12</option>
-    				<option>16</option>
-    				<option>20</option>
-    				<option>In Stock</option>  				   				
-    			</select>
-    		</p>
-    		</div>
-    		<div class="page-no">
-    			<p>Result Pages:<ul>
-    				<li><a href="#">1</a></li>
-    				<li class="active"><a href="#">2</a></li>
-    				<li><a href="#">3</a></li>
-    				<li>[<a href="#"> Next>>></a >]</li>
-    				</ul></p>
-    		</div>
-    		<div class="clearfix"></div>
+<!-- 			<div class="content_bottom">
+
+    		<div class="clearfix"></div> -->
     	</div>
-			<div class="section group">
-				<div class="grid_1_of_4 images_1_of_4">
-					 <a href="single.html"><img src="images/new-pic1.jpg" alt="" /></a>
-					 <div class="discount">
-					 <span class="percentage">40%</span>
-					</div>
-					 <h2>Lorem Ipsum is simply </h2>
-					 <p><span class="strike">$438.99</span><span class="price">$403.66</span></p>
-				     <div class="btn_form"><span><img src="images/cart.jpg" alt="" /><a href="single.html" class="cart-button">Add to Cart</a></span> </div>
-				     <div class="button"><span><a href="single.html" class="details">Details</a></span></div>
-				</div>
-				<div class="grid_1_of_4 images_1_of_4">
-					<a href="single.html"><img src="images/new-pic2.jpg" alt="" /></a>
-					 <div class="discount">
-					 <span class="percentage">22%</span>
-					</div>
-					 <h2>Lorem Ipsum is simply </h2>
-					 <p><span class="strike">$667.22</span><span class="price">$621.75</span></p>
-				      <div class="button"><span><img src="images/cart.jpg" alt="" /><a href="single.html" class="cart-button">Add to Cart</a></span></div>
-				     <div class="button"><span><a href="single.html" class="details">Details</a></span></div>
-				</div>
-				<div class="grid_1_of_4 images_1_of_4">
-					<a href="single.html"><img src="images/feature-pic2.jpg" alt="" /></a>
-					<div class="discount">
-					 <span class="percentage">55%</span>
-					</div>
-					 <h2>Lorem Ipsum is simply </h2>
-					 <p><span class="strike">$457.22</span><span class="price">$428.02</span></p>
-				      <div class="button"><span><img src="images/cart.jpg" alt="" /><a href="single.html" class="cart-button">Add to Cart</a></span> </div>
-				     <div class="button"><span><a href="single.html" class="details">Details</a></span></div>
-				</div>
-				<div class="grid_1_of_4 images_1_of_4">
-				 <a href="single.html"><img src="images/new-pic3.jpg" alt="" /></a>
-				  <div class="discount">
-					 <span class="percentage">66%</span>
-					</div>
-					 <h2>Lorem Ipsum is simply </h2>					 
-					 <p><span class="strike">$643.22</span><span class="price">$457.88</span></p>
-				      <div class="button"><span><img src="images/cart.jpg" alt="" /><a href="single.html" class="cart-button">Add to Cart</a></span> </div>
-				     <div class="button"><span><a href="single.html" class="details">Details</a></span></div>
-				</div>
-				<div class="clearfix"></div>
-			</div>
-		</div>
-	</div>
-		<div class="device">
-			<div class="course_demo">
-		          <ul id="flexiselDemo">	
-					<li>
-						<div class="ipad text-center">
-							<img src="images/phone.jpg" alt="" />
-							<h4>Ipad Mini</h4>
-							<h3>$499</h3>
-							<ul>
-								<li><i class="cart-1"></i></li>
-								<li><a class="cart" href="#">Add To Cart</a></li>
-							</ul>
-							<div class="clearfix"></div>
-							<ul>
-								<li><i class="heart"></i></li>
-								<li><a class="cart" href="#">Add To Wishlist</a></li>
-							</ul>
-						</div>
-					</li>
-					<li>
-					<div class="ipad text-center">
-							<img src="images/phone1.jpg" alt="" />
-							<h4>Ipad Mini</h4>
-							<h3>$499</h3>
-							<ul>
-								<li><i class="cart-1"></i></li>
-								<li><a class="cart" href="#">Add To Cart</a></li>
-							</ul>
-							<div class="clearfix"></div>
-							<ul>
-								<li><i class="heart"></i></li>
-								<li><a class="cart" href="#">Add To Wishlist</a></li>
-							</ul>
-						</div>
-					</li>	
-					<li>
-					<div class="ipad text-center">
-							<img src="images/phone2.jpg" alt="" />
-							<h4>Ipad Mini</h4>
-							<h3>$499</h3>
-							<ul>
-								<li><i class="cart-1"></i></li>
-								<li><a class="cart" href="#">Add To Cart</a></li>
-							</ul>
-							<div class="clearfix"></div>
-							<ul>
-								<li><i class="heart"></i></li>
-								<li><a class="cart" href="#">Add To Wishlist</a></li>
-							</ul>
-						</div>
-					</li>	
-					<li>
-					<div class="ipad text-center">
-							<img src="images/phone3.jpg" alt="" />
-							<h4>Ipad Mini</h4>
-							<h3>$499</h3>
-							<ul>
-								<li><i class="cart-1"></i></li>
-								<li><a class="cart" href="#">Add To Cart</a></li>
-							</ul>
-							<div class="clearfix"></div>
-							<ul>
-								<li><i class="heart"></i></li>
-								<li><a class="cart" href="#">Add To Wishlist</a></li>
-							</ul>
-						</div>
-					</li>	
-					<li>
-					<div class="ipad text-center">
-							<img src="images/phone4.jpg" alt="" />
-							<h4>Ipad Mini</h4>
-							<h3>$499</h3>
-							<ul>
-								<li><i class="cart-1"></i></li>
-								<li><a class="cart" href="#">Add To Cart</a></li>
-							</ul>
-							<div class="clearfix"></div>
-							<ul>
-								<li><i class="heart"></i></li>
-								<li><a class="cart" href="#">Add To Wishlist</a></li>
-							</ul>
-						</div>
-					</li>							    	  	       	   	  									    	  	       	   	    	
-				</ul>
-			</div>
-		</div>
-		</div>
-	</div>
+</div>
 	 <div class="footer">
 		<div class="wrap">
 			<div class="contact-section">
 				<div class="col-md-4 follow text-left">
-					<h3>Follow Us</h3>
-					<p>Lorem ipsum dolor sit amet</p>
+					<h3></h3>
+					<p></p>
 					<div class="social-icons">
-						<i class="twitter"></i>
-						<i class="facebook"></i>
-						<i class="googlepluse"></i>
-						<i class="pinterest"></i>
-						<i class="linkedin"></i>
 					</div>
 				</div>
 				<div class="col-md-4 subscribe text-left">
-					<h3>Subscribe Us</h3>
-					<p>Get the latest updates & Offers right in your inbox.</p>
-					<input type="text" class="text" value="" onfocus="this.value = '';" onblur="if (this.value == '') {this.value = '';}">
-					<input type="submit" value="Subscribe">
+					<h3></h3>
+					<p></p>
 				</div>
 				<div class="col-md-4 help text-right">
 					<h3>Need Help?</h3>
-					<p>Lorem ipsum dolor sit amet</p>
-					<a href="contact.html">Contact us</a>
+					<p></p>
+					<a href="contact.jsp">Contact us</a>
 				</div>
 				<div class="clearfix"></div>
 			</div>
 			<div class="footer-middle">
-				<div class="col-md-6 different-products">
-					<ul>
-						<li class="first"> Shop </li> -
-						<li><a href=""> Mobiles </a></li> |
-						<li><a href=""> Laptops </a></li> |
-						<li><a href=""> Cameras </a></li> |
-						<li><a href=""> Clothing </a></li> |
-						<li><a href=""> Footwear </a></li> |
-						<li><a href=""> Jewellery </a></li> 
-					</ul>
-					<ul>
-						<li class="first"> Help </li> -
-						<li><a href=""> Faqs </a></li> |
-						<li><a href=""> shipping </a></li> |
-						<li><a href=""> payments </a></li> |
-						<li><a href=""> cancellation&returns </a></li> 
-					</ul>
-					<ul>
-						<li class="first"> account <li> -
-						<li><a href=""> log in </a></li> |
-						<li><a href=""> sign up </a></li> |
-						<li><a href=""> My WhishList </a></li> |
-						<li><a href=""> My cart </a></li> 
-					</ul>
-					<ul>
-						<li class="first"> boxshop </li> -
-						<li><a href=""> contact us </a></li> |
-						<li><a href=""> about us </a></li> |
-						<li><a href=""> careers </a></li> |
-						<li><a href=""> blog </a></li> |
-						<li><a href=""> press </a></li>
-					</ul>
-					<ul>
-						<li class="first"> policies</li> -
-						<li><a href=""> terms of use </a></li> |
-						<li><a href=""> security </a></li> |
-						<li><a href=""> privacy policy</a></li>
-					</ul>
-				</div>
+				<div class="col-md-6 different-products"></div>
 				<div class="col-md-6 about-text text-right">
 					<h4>About BoxShop</h4>
 					<p>The fashion never alters, and as it is neither disagreeable nor uneasy, so it is suited to the climate, and calculated both for their summers and winters. Every family makes their own clothes; but all among them, women as well as men, learn one or other of the trades formerly mentioned.</p>

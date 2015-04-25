@@ -1,5 +1,5 @@
 table a:link {
-	color: #000000;
+	color: #666;
 	font-weight: bold;
 	text-decoration:none;
 }
@@ -14,14 +14,14 @@ table a:hover {
 	text-decoration:underline;
 }
 table {
-	width:100%;
+	width:95%;
 	font-family:Arial, Helvetica, sans-serif;
 	color:#666;
-	font-size:17px;
+	font-size:15px;
 	text-shadow: 1px 1px 0px #fff;
 	background:#eaebec;
-	margin:3px;
-	border:#ccc 5px solid;
+	margin:20px;
+	border:#A9A9A9 5px solid;
 
 	-moz-border-radius:3px;
 	-webkit-border-radius:3px;
@@ -32,12 +32,13 @@ table {
 	box-shadow: 0 1px 2px #d1d1d1;
 }
 table th {
- 	padding:21px 25px 22px 25px;
-	border-top:1px solid #fafafa;*/
+	padding:21px 25px 22px 25px;
+	border-top:1px solid #fafafa;
 	border-bottom:1px solid #e0e0e0;
- 	background: #ededed;
+
+	background: #ededed;
 	background: -webkit-gradient(linear, left top, left bottom, from(#ededed), to(#ebebeb));
-	background: -moz-linear-gradient(top,  #ededed,  #ebebeb); 
+	background: -moz-linear-gradient(top,  #ededed,  #ebebeb);
 }
 table th:first-child {
 	text-align: left;
