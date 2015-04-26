@@ -100,56 +100,66 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 	<!-- header-section-starts -->
 	<div class="header">
 		<div class="top-header">
-			<div class="wrap">
+<div class="wrap">
 				<div class="header-left">
 					<ul>
-						<li><a href="#"></a></li>
-						<li><a href="order.html"></a></li>
-					</ul>
-				</div>
-				<div class="header-right">
-					<ul>
-						<li>
-							<i class="user"></i>
-							<a href="register.jsp">My Account</a>
-						</li>
-						<% if(session.getAttribute("username") == null) 
+						 <% if(session.getAttribute("username") == null) 
 							{ %>
 						<li class="login">
 							<i class="lock"></i>
-							<a href="login.jsp">Login</a>|
+							<a href="login.jsp">Login</a>|							
 						</li>
 						<%} %>
 						<% if(session.getAttribute("username") != null) 
 							{ %>
 						<li class="login">
-							<a href=# >Welcome <%= session.getAttribute( "username" ) %></a>
+							<a href=# >Welcome <%= session.getAttribute( "username" ) %> | </a>
 						</li>
-						<%} %>
+						<%} %> 
+					<li>
+					 <% if(session.getAttribute("username") == null) 
+							{ %>						
+					<!-- <div class="sign-up-right"> -->
+						<a href="login.jsp">Sign Up</a>
+					<!-- </div> -->
+					<%} else {%>
+					<!-- <div class="sign-up-right"> -->
+						<a href="logout.jsp">Logout</a>
+					<!-- </div> -->
+					<%} %>
+					</li>
+					</ul>		
+						
+					</ul>
+				</div>
+				<div class="header-right">
+					<ul>					
+						 <li>
+							<i class="user"></i>
+							<a href="register.jsp">My Account</a>
+						</li>						
+						 <% if(session.getAttribute("username") != null) 
+							{ %>
+						<li>						
+							<a href="myorders.jsp">My Orders</a>						
+						</li>
+						<%} %>				
 						<li>
 							<i class="cart"></i>
-							<a href="viewcart.jsp">Shopping Cart</a>
+							<% if(session.getAttribute("username") != null) 
+							{ %>
+							<a href="viewcart.jsp">Shopping Cart</a><%} else {%>
+							<a href="login.jsp">Shopping Cart</a><%} %>
 						</li>
-					 <li class="last">
+						<li class="last">
 						 <% if(session.getAttribute("username") == null) 
 							{ %>0
 							<% } else {%> <%=cdao.findNoOfItems(session.getAttribute("username").toString()) %>
 							<%} %>
 						</li>
 					</ul>
-					<% if(session.getAttribute("username") == null) 
-							{ %>						
-					<div class="sign-up-right">
-						<a href="login.jsp">Sign Up</a>
-					</div>
-					<%} else {%>
-					<div class="sign-up-right">
-						<a href="logout.jsp">Logout</a>
-					</div>
-					<%} %>					
 				</div>
-				
-			<div class="clearfix"></div>
+				<div class="clearfix"></div>
 			</div>
 		</div>
 		<div class="wrap">
@@ -209,7 +219,7 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 	<div class="content">
 		<div class="pag-nav">
 			<ul class="p-list">
-				<li><a href="index.html"></a></li>
+				<li><a href="index.jsp"></a></li>
 				<li class="act">&nbsp;</li>
 			</ul>
 		</div>
@@ -223,11 +233,13 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 				<h3>PERSONAL INFORMATION</h3>
 				 <div>
 					<span>First Name</span>
-					<input name="first" type="text"> 
+					<input name="first" type="text" <%if(bean.getCustinfo()!=null){ %> value=<%=bean.getCustinfo().getFirstname() %>
+													<%} else { %> value="" <%} %>> 
 				 </div>
 				 <div>
 					<span>Last Name</span>
-					<input name="last" type="text"> 
+					<input name="last" type="text" <%if(bean.getCustinfo()!=null){ %> value=<%=bean.getCustinfo().getLastname() %>
+													<%} else { %> value="" <%} %>> 
 				 </div>
 				 <div>
 					 <span>Email Address</span>
@@ -248,7 +260,10 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 					    <h3>ADDRESS INFORMATION</h3>
 						 <div>
 							<span>Mailing Address</span>
-							<textarea name="address" rows="3" cols="100"></textarea>
+							<textarea name="address" rows="3" cols="100">
+							<%if(bean.getCustinfo()!=null){ %> <%=bean.getCustinfo().getAddress() %>
+													<%} else { %>  <%} %>
+							</textarea>
 						 </div>
 				 </div>
 			<div class="clearfix"> </div>

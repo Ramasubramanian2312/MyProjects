@@ -213,52 +213,64 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 		%>
 	<div class="header">
 		<div class="top-header">
-			<div class="wrap">
+<div class="wrap">
 				<div class="header-left">
 					<ul>
-					<li><a href="order.html"></a></li>
-					</ul>
-				</div>
-				<div class="header-right">
-					<ul>
-						<li>
-							<i class="user"></i>
-							<a href="register.jsp">My Account</a>
-						</li>
-						<% if(session.getAttribute("username") == null) 
+						 <% if(session.getAttribute("username") == null) 
 							{ %>
 						<li class="login">
 							<i class="lock"></i>
-							<a href="login.jsp">Login</a>|
+							<a href="login.jsp">Login</a>|							
 						</li>
 						<%} %>
 						<% if(session.getAttribute("username") != null) 
 							{ %>
 						<li class="login">
-							<a href=# >Welcome <%= session.getAttribute( "username" ) %></a>
+							<a href=# >Welcome <%= session.getAttribute( "username" ) %> | </a>
 						</li>
-						<%} %>
+						<%} %> 
+					<li>
+					 <% if(session.getAttribute("username") == null) 
+							{ %>						
+					<!-- <div class="sign-up-right"> -->
+						<a href="login.jsp">Sign Up</a>
+					<!-- </div> -->
+					<%} else {%>
+					<!-- <div class="sign-up-right"> -->
+						<a href="logout.jsp">Logout</a>
+					<!-- </div> -->
+					<%} %>
+					</li>
+					</ul>		
+						
+					</ul>
+				</div>
+				<div class="header-right">
+					<ul>					
+						 <li>
+							<i class="user"></i>
+							<a href="register.jsp">My Account</a>
+						</li>						
+						 <% if(session.getAttribute("username") != null) 
+							{ %>
+						<li>						
+							<a href="myorders.jsp">My Orders</a>						
+						</li>
+						<%} %>				
 						<li>
 							<i class="cart"></i>
-							<a href="#">Shopping Cart</a>
+							<% if(session.getAttribute("username") != null) 
+							{ %>
+							<a href="viewcart.jsp">Shopping Cart</a><%} else {%>
+							<a href="login.jsp">Shopping Cart</a><%} %>
 						</li>
-					 <li class="last">
+						<li class="last">
 						 <% if(session.getAttribute("username") == null) 
 							{ %>0
 							<% } else {%> <%=cdao.findNoOfItems(session.getAttribute("username").toString()) %>
 							<%} %>
 						</li>
 					</ul>
-					<% if(session.getAttribute("username") == null) 
-							{ %>						
-					<div class="sign-up-right">
-						<a href="login.jsp">Sign Up</a>
-					</div>
-					<%} else {%>
-					<div class="sign-up-right">
-						<a href="logout.jsp">Logout</a>
-					</div>
-					<%} %>					
 				</div>
 				<div class="clearfix"></div>
 			</div>
@@ -400,7 +412,10 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 					    <%-- <button class="btn btn-primary" 
 						onClick='updateQuantity("<%=c.getItemId()%>","<%=c.getCustomerId() %>","<%=c.getName() %>","<%=c.getThumbnailImage() %>","<%=c.getSalePrice() %>")' value="Change">Update</button></td> --%>
 					<td>$<%=c.getSalePrice() %></td>
-					<td>Delivery Details</td>
+					<td>*Free
+					<br>
+*Delivered in 2 business days.<br>
+Faster options may be available during checkout.</td>
 					<td>$<%=c.getSalePrice()*c.getQuantity() %></td>
 					
 				</tr>
@@ -427,94 +442,7 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 					
 		</div>
 	</div>
-		<div class="device">
-			<div class="course_demo">
-		          <ul id="flexiselDemo">	
-					<li>
-						<div class="ipad text-center">
-							<img src="images/phone.jpg" alt="" />
-							<h4>Ipad Mini</h4>
-							<h3>$499</h3>
-							<ul>
-								<li><i class="cart-1"></i></li>
-								<li><a class="cart" href="#">Add To Cart</a></li>
-							</ul>
-							<div class="clearfix"></div>
-							<ul>
-								<li><i class="heart"></i></li>
-								<li><a class="cart" href="#">Add To Wishlist</a></li>
-							</ul>
-						</div>
-					</li>
-					<li>
-					<div class="ipad text-center">
-							<img src="images/phone1.jpg" alt="" />
-							<h4>Ipad Mini</h4>
-							<h3>$499</h3>
-							<ul>
-								<li><i class="cart-1"></i></li>
-								<li><a class="cart" href="#">Add To Cart</a></li>
-							</ul>
-							<div class="clearfix"></div>
-							<ul>
-								<li><i class="heart"></i></li>
-								<li><a class="cart" href="#">Add To Wishlist</a></li>
-							</ul>
-						</div>
-					</li>	
-					<li>
-					<div class="ipad text-center">
-							<img src="images/phone2.jpg" alt="" />
-							<h4>Ipad Mini</h4>
-							<h3>$499</h3>
-							<ul>
-								<li><i class="cart-1"></i></li>
-								<li><a class="cart" href="#">Add To Cart</a></li>
-							</ul>
-							<div class="clearfix"></div>
-							<ul>
-								<li><i class="heart"></i></li>
-								<li><a class="cart" href="#">Add To Wishlist</a></li>
-							</ul>
-						</div>
-					</li>	
-					<li>
-					<div class="ipad text-center">
-							<img src="images/phone3.jpg" alt="" />
-							<h4>Ipad Mini</h4>
-							<h3>$499</h3>
-							<ul>
-								<li><i class="cart-1"></i></li>
-								<li><a class="cart" href="#">Add To Cart</a></li>
-							</ul>
-							<div class="clearfix"></div>
-							<ul>
-								<li><i class="heart"></i></li>
-								<li><a class="cart" href="#">Add To Wishlist</a></li>
-							</ul>
-						</div>
-					</li>	
-					<li>
-					<div class="ipad text-center">
-							<img src="images/phone4.jpg" alt="" />
-							<h4>Ipad Mini</h4>
-							<h3>$499</h3>
-							<ul>
-								<li><i class="cart-1"></i></li>
-								<li><a class="cart" href="#">Add To Cart</a></li>
-							</ul>
-							<div class="clearfix"></div>
-							<ul>
-								<li><i class="heart"></i></li>
-								<li><a class="cart" href="#">Add To Wishlist</a></li>
-							</ul>
-						</div>
-					</li>							    	  	       	   	  									    	  	       	   	    	
-				</ul>
-			</div>
-		</div>
-		</div>
-	</div>
+
 	 <div class="footer">
 		<div class="wrap">
 			<div class="contact-section">
@@ -523,7 +451,7 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 			<div class="col-md-4 help text-right">
 					<h3>Need Help?</h3>
 					<p></p>
-					<a href="contact.html">Contact us</a>
+					<a href="contact.jsp">Contact us</a>
 			</div>
 				<div class="clearfix"></div>
 			</div>

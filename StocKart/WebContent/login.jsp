@@ -80,37 +80,68 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 		<script type="text/javascript" src="js/jquery.flexisel.js"></script>
 </head>
 <body>
+	<%CartDao cdao = new CartDao(); %>
 	<!-- header-section-starts -->
 	<div class="header">
 		<div class="top-header">
-			<div class="wrap">
+<div class="wrap">
 				<div class="header-left">
 					<ul>
-						<li><a href="#"></a></li>
-						<li><a href="order.html"></a></li>
+						 <% if(session.getAttribute("username") == null) 
+							{ %>
+						<li class="login">
+							<i class="lock"></i>
+							<a href="login.jsp">Login</a>|							
+						</li>
+						<%} %>
+						<% if(session.getAttribute("username") != null) 
+							{ %>
+						<li class="login">
+							<a href=# >Welcome <%= session.getAttribute( "username" ) %> | </a>
+						</li>
+						<%} %> 
+					<li>
+					 <% if(session.getAttribute("username") == null) 
+							{ %>						
+					<!-- <div class="sign-up-right"> -->
+						<a href="login.jsp">Sign Up</a>
+					<!-- </div> -->
+					<%} else {%>
+					<!-- <div class="sign-up-right"> -->
+						<a href="logout.jsp">Logout</a>
+					<!-- </div> -->
+					<%} %>
+					</li>
+					</ul>		
+						
 					</ul>
 				</div>
 				<div class="header-right">
-					<ul>
-						<li>
+					<ul>					
+						 <li>
 							<i class="user"></i>
 							<a href="register.jsp">My Account</a>
+						</li>						
+						 <% if(session.getAttribute("username") != null) 
+							{ %>
+						<li>						
+							<a href="myorders.jsp">My Orders</a>						
 						</li>
-						<li class="login">
-							<i class="lock"></i>
-							<a href="login.jsp">Log In/</a>
-						</li>
+						<%} %>				
 						<li>
 							<i class="cart"></i>
-							<a href="#">Shopping Cart</a>
+							<% if(session.getAttribute("username") != null) 
+							{ %>
+							<a href="viewcart.jsp">Shopping Cart</a><%} else {%>
+							<a href="login.jsp">Shopping Cart</a><%} %>
 						</li>
-						 <li class="last">
-						 0
+						<li class="last">
+						 <% if(session.getAttribute("username") == null) 
+							{ %>0
+							<% } else {%> <%=cdao.findNoOfItems(session.getAttribute("username").toString()) %>
+							<%} %>
 						</li>
 					</ul>
-					<div class="sign-up-right">
-						<a href="login.jsp">Sign Up</a>
-					</div>
 				</div>
 				<div class="clearfix"></div>
 			</div>

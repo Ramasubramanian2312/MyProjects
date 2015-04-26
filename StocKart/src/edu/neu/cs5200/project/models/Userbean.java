@@ -77,6 +77,7 @@ public class Userbean implements Serializable {
 	public void setOrders(List<Order> orders) {
 		this.orders = orders;
 	}
+	
 
 	public Order addOrder(Order order) {
 	getOrders().add(order);
@@ -92,6 +93,9 @@ public class Userbean implements Serializable {
 	return order;
 	}
 
+	public static void main(String[] args) {
+
+	}
 
 
 }

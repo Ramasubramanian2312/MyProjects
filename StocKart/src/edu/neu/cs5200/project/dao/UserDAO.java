@@ -73,19 +73,6 @@ public class UserDAO
 		
 	}
 	
-//	public void getOrders(String username){
-//		Userbean user = em.find(Userbean.class, username);
-//		List<Order> orders = user.getOrders();
-//		List<Orderdetail> details = new ArrayList<Orderdetail>();
-//		for(Order o:orders){
-//			details = o.getOrderdetails();
-//			System.out.println(o.getOrderId());
-//			for(Orderdetail d:details){
-//				System.out.println(d.getName());
-//			}
-//		}
-//		
-//	}
 
 	public static void main(String[] args) {
 		UserDAO dao = new UserDAO();
