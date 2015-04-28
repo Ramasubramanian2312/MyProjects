@@ -7,7 +7,9 @@ import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
+import javax.persistence.Query;
 
+import edu.neu.cs5200.project.models.Cart;
 import edu.neu.cs5200.project.models.Custinfo;
 import edu.neu.cs5200.project.models.Order;
 import edu.neu.cs5200.project.models.Orderdetail;
@@ -29,6 +31,21 @@ public class UserDAO
 		return null;
 	}
 		
+	public List<Userbean> getAllUsers()
+	{
+		Query query = em.createQuery("Select u from Userbean u");
+        return (List<Userbean>)query.getResultList();
+		
+	}
+	
+	public void removeUser(String username)
+	{
+		em.getTransaction().begin();
+		Userbean user = em.find(Userbean.class, username);
+		em.remove(user);
+		em.getTransaction().commit();
+	}
+	
 	public Userbean login (Userbean user)
 	{
 		Userbean ub = em.find(Userbean.class, user.getUsername());

@@ -129,6 +129,9 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 						<li>						
 							<a href="myorders.jsp">My Orders</a>						
 						</li>
+						<li>						
+							<a href="wishlist.jsp">My WishList</a>						
+						</li>
 						<%} %>				
 						<li>
 							<i class="cart"></i>

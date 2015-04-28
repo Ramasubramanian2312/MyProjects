@@ -213,7 +213,7 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 					<form action="logincheck.jsp">
 					<div class="cus_info_wrap">
 						<label class="labelTop">
-						Email:
+						Username:
 						<span class="require">*</span>
 						</label>
 						<input type="text" name="username" value="">
@@ -235,11 +235,37 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 					<input type="submit" value="SIGNIN" class="botton">
 				</div>
 				</form>
-				<div class="forgetit">
-					<a href="">Always keep your passwords safe</a>
-					<br>
-					<a href="">Please refer to password protection guidelines</a>
+				<br>
+				<br>
+				<h4>Admin Login</h4>
+				<br>
+<form action="adminlogincheck.jsp">
+					<div class="cus_info_wrap">
+						<label class="labelTop">
+						Username:
+						<span class="require">*</span>
+						</label>
+						<input type="text" name="username" value="">
+					</div>
+					<div class="clearfix"></div>
+					<div class="cus_info_wrap">
+						<label class="labelTop">
+						Password:
+						<span class="require">*</span>
+						</label>
+						<input type="password" name="password" value="">
+					</div>
+					<div class="clearfix"></div>
+					<%-- <div class="sky-form">
+					<label class="checkbox"><input type="checkbox" name="checkbox" ><i></i>Remember me on this computer </label>
+					<c:out value="${messages['error']}"/>
+				</div> --%>
+				<c:out value="${messages['adminerror']}"/>
+				<div class="botton1">
+					<input type="submit" value="SIGNIN" class="botton">
 				</div>
+				</form>
+
 				</div>
 				<form action="signup.jsp" method="post">
 				<div class="col-md-5 sign-up text-center">
@@ -279,7 +305,7 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 						<c:out value="${messages['pwd3']}"/>
 					</div>					
 					<div class="botton1">
-					<input type="submit" value="SIGNIN" class="botton">
+					<input type="submit" value="SIGN UP" class="botton">
 					</div>
 				</div>
 				</form>

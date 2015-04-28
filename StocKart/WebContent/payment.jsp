@@ -10,7 +10,8 @@ License URL: http://creativecommons.org/licenses/by/3.0/
 	import="edu.neu.cs5200.project.rest.client.*"
 	import="edu.neu.cs5200.project.models.*"
 	import="edu.neu.cs5200.project.dao.*"
-	import="java.util.*"%>
+	import="java.util.*"
+	import="java.text.*"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -84,13 +85,10 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 			function itemPresent() 
 			{alert("Item already added to cart.");}
 			
-			
-			function updateQuantity(id,custId,img,price)
-			{				
+			function updateQuantity(id,custId,pname,img,price)
+			{
 				var qtyid = "quantity".concat(id);
 				var qty = document.getElementById(qtyid).value;
-				var pnameid = "pname".concat(id);
-				var pname = document.getElementById(pnameid).value;
 				var cart = 
 					{
 						itemId: id,
@@ -101,20 +99,7 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 						salePrice: price
 					};
 				updateCart(cart);
-				<% Thread.sleep(3000); %>
 				location.reload(true);
-			}
-			
-			
-			function updateQuantityTest(id,custId,img,price)
-			{
-				alert(id);
-				alert(custId);
-				var qtyid = "quantity".concat(id);
-				var qty = document.getElementById(qtyid).value;
-				alert(qty);
-				alert(img);
-				alert(price);
 			}
 			
 			function removeItem(id){
@@ -149,8 +134,7 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
                              contentType: "application/json",
                     success: function(response) {
                     		console.log(response);
-                    		<% Thread.sleep(3000); %>
-                             //alert("Item Removed from Cart");
+                           alert("Item Removed from Cart");
                     },
                     error: function(response) {
                             console.log(response);
@@ -163,17 +147,26 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 			String itemId = null;
 			String action = null;
 			Product product = null;
+			double price = 0;
+			CartDao cdao = new CartDao();
+			UserDAO udao = new UserDAO();
+			OrderDao odao = new OrderDao();
+			String priceStr = request.getParameter("totalprice");
+			if(priceStr!=null)
+			price = Double.valueOf(request.getParameter("totalprice"));
 			Map<String, String> messages = new HashMap<String, String>();
 			action = request.getParameter("action");
 			itemId = request.getParameter("itemId");
 			ShoppingRestClient client = new ShoppingRestClient();
-			CartDao cdao = new CartDao();
 			if(action!=null)
 			{
+
 				if(session.getAttribute("username")!=null)
 				{
+
 					if("create".equals(action))
 					{	
+
 						Cart cart = new Cart();
 						product = client.findProductById(itemId);
 						cart.setItemId(product.getItemId()+"");
@@ -193,6 +186,28 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 							cdao.createCartItem(cart);	
 						}
 						
+						
+					}
+			 		if("addorder".equals(action))
+					{
+						Order order = new Order(null,new Date(),"new",price,null,null);
+						int orderId = udao.addOrder(session.getAttribute("username").toString(), order);
+						System.out.println(orderId);
+						//List<Orderdetail> lod = new ArrayList<Orderdetail>();
+						List<Cart> cartlist = cdao.findAllItems(session.getAttribute("username").toString());
+						for(int i=0;i<cartlist.size();i++){
+							Orderdetail detail = new Orderdetail();
+							detail.setOrderDetailId(null);
+							detail.setItemId(cartlist.get(i).getItemId());
+							detail.setQuantity(cartlist.get(i).getQuantity());
+							detail.setName(cartlist.get(i).getName());
+							detail.setThumbnailImage(cartlist.get(i).getThumbnailImage());
+							detail.setSalePrice(cartlist.get(i).getSalePrice());
+							odao.addOrderdetail(orderId, detail);
+						}
+						cdao.clearCart(session.getAttribute("username").toString());%>
+						<script>alert("Order placed successfully!")</script>
+						<% response.sendRedirect("index.jsp");
 					}
 				}
 				else
@@ -333,7 +348,7 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
     <div class="content">
     	<div class="content_top">
     		<div class="heading">
-    		<h3>My Shopping Cart</h3>
+    		<h3>Order Summary</h3>
     		</div>
     		<div class="clearfix"></div>
     	</div>
@@ -395,25 +410,19 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 					&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 					&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 					&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-					<a href="#" onClick='removeItem("<%=c.getItemId()%>")'>Remove From Cart</a>
-					<br><%=c.getName() %>
-					</td>
-					<td><input id="quantity<%=c.getItemId()%>" type="text" size="1" value="<%=c.getQuantity() %>"/>
-					<br>
+					<%-- <a href="#" onClick='removeItem("<%=c.getItemId()%>")'>Remove From Cart</a> --%>
+					<br><%=c.getName() %></td>
+					<td><input id="quantity<%=c.getItemId()%>" type="text" size="1" value="<%=c.getQuantity() %>" readonly/>
+<%-- 					<br>
 					<br>
 					<div class="btn_form">
-					 <form>
-					 <input type="hidden" id="pname<%=c.getItemId()%>" value="<%=c.getName()%>" />
- 					<input
-						type="submit" value="Update" onClick="updateQuantity('<%=c.getItemId()%>','<%=c.getCustomerId() %>','<%=c.getThumbnailImage() %>','<%=c.getSalePrice() %>')"/>
-						<%-- ,"<%=c.getCustomerId() %>","<%=c.getName() %>","<%=c.getThumbnailImage() %>","<%=c.getSalePrice() %>")'/> --%>
-						<%-- <a href="#" onClick='updateQuantity("<%=c.getItemId()%>","<%=c.getCustomerId() %>","<%=c.getName() %>","<%=c.getThumbnailImage() %>","<%=c.getSalePrice() %>")'
-						>Update</a> --%>
+					<form>
+					<input
+						type="submit" value="Update" 
+						onClick='updateQuantity("<%=c.getItemId()%>","<%=c.getCustomerId() %>","<%=c.getName() %>","<%=c.getThumbnailImage() %>","<%=c.getSalePrice() %>")'/>
 					</form>
-					</div>
+					</div> --%>
 					</td>
-					    <%-- <button class="btn btn-primary" 
-						onClick='updateQuantity("<%=c.getItemId()%>","<%=c.getCustomerId() %>","<%=c.getName() %>","<%=c.getThumbnailImage() %>","<%=c.getSalePrice() %>")' value="Change">Update</button></td> --%>
 					<td>$<%=c.getSalePrice() %></td>
 					<td>*Free
 					<br>
@@ -427,16 +436,63 @@ Faster options may be available during checkout.</td>
 					}
 				%>
 				<tr>
-					<td colspan="3" align="right"><h3>Estimated Total: $<%=cdao.findCartTotal(session.getAttribute("username").toString()) %></h3></td>
-					<td colspan="2">
+					<td colspan="4" align="right"><h1>Payable Amount: $<%=cdao.findCartTotal(session.getAttribute("username").toString()) %></h1></td>
+					<td colspan="1">
 						<div class="btn_form">
-						<form>
-						<button class="btn default"><a href="index.jsp">Continue Shopping</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-						&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-						&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-						<a href="orders.jsp">CheckOut</a></button>
-						</form>
-						</div>
+										<form action="https://www.sandbox.paypal.com/cgi-bin/webscr"
+											method="post">
+											<input type="hidden" name="cmd" value="_cart"> <input
+												type="hidden" name="upload" value="1"> <input
+												type="hidden" name="business" value="business@boxshop.com">
+											<!-- Begin First Item -->
+											<input type="hidden" name="quantity_1" value="1"> <input
+												type="hidden" name="item_name_1" value="Item A"> <input
+												type="hidden" name="item_number_1" value="Test SKU A">
+											<input type="hidden" name="amount_1" value="0.01">
+											<!--<input type="hidden" name="shipping_1" value="0.01">
+<input type="hidden" name="tax_1" value="0.02">-->
+											<!-- End First Item -->
+											<!-- Begin Second Item -->
+											<input type="hidden" name="quantity_2" value="1"> <input
+												type="hidden" name="item_name_2" value="Test Item B">
+											<input type="hidden" name="item_number_2" value="Test SKU B">
+											<input type="hidden" name="amount_2" value="0.02">
+											<!--<input type="hidden" name="shipping_2" value="0.02">
+<input type="hidden" name="tax_2" value="0.02">-->
+											<!-- End Second Item -->
+											<!-- Begin Third Item -->
+											<input type="hidden" name="quantity_3" value="1"> <input
+												type="hidden" name="item_name_3" value="Test Item C">
+											<input type="hidden" name="item_number_3" value="Test SKU C">
+											<input type="hidden" name="amount_3" value="0.03">
+											<!--<input type="hidden" name="shipping_3" value="0.03">
+<input type="hidden" name="tax_3" value="0.03"> -->
+											<!-- End Third Item -->
+											<input type="hidden" name="currency_code" value="USD">
+											<input type="hidden" name="first_name" value="John">
+											<input type="hidden" name="last_name" value="Doe"> <input
+												type="hidden" name="address1" value="9 Elm Street">
+											<input type="hidden" name="address2" value="Apt 5"> <input
+												type="hidden" name="city" value="Berwyn"> <input
+												type="hidden" name="state" value="PA"> <input
+												type="hidden" name="zip" value="19312"> <input
+												type="hidden" name="night_phone_a" value="610"> <input
+												type="hidden" name="night_phone_b" value="555"> <input
+												type="hidden" name="night_phone_c" value="1234"> <input
+												type="hidden" name="email" value="jdoe@zyzzyu.com">
+											<input type='hidden' name='rm' value='2'> <input
+												type="hidden" value="http://localhost:8080/PayPal/index.jsp"
+												name="return">
+
+
+											<!--<input type="hidden" name="tax_cart" value="5.13"> -->
+											Upload <br> <input type="image"
+												src="https://www.sandbox.paypal.com/en_US/i/btn/btn_cart_SM.gif"
+												border="0" name="upload"
+												alt="Make payments with PayPal - it's fast, free and secure!"
+												width="87" height="23">
+										</form>
+									</div>
 					</td>
 				</tr>
 	</tbody>

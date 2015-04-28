@@ -1,36 +1,36 @@
 package edu.neu.cs5200.project.models;
 
 import java.io.Serializable;
-
 import javax.persistence.*;
-
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 
 /**
- * The persistent class for the cart database table.
+ * The persistent class for the wishlist database table.
  * 
  */
 @Entity
-@JsonIgnoreProperties(ignoreUnknown=true)
-@NamedQuery(name="Cart.findAll", query="SELECT c FROM Cart c")
-public class Cart implements Serializable {
+@Table(name="wishlist")
+@NamedQuery(name="Wishlist.findAll", query="SELECT w FROM Wishlist w")
+public class Wishlist implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
+	@Column(unique=true, nullable=false)
 	private String itemId;
 
+	@Column(nullable=false, length=20)
 	private String customerId;
 
+	@Column(length=256)
 	private String name;
 
-	private int quantity;
-
+	@Column(nullable=false)
 	private double salePrice;
 
+	@Column(length=256)
 	private String thumbnailImage;
 
-	public Cart() {
+	public Wishlist() {
 	}
 
 	public String getItemId() {
@@ -55,14 +55,6 @@ public class Cart implements Serializable {
 
 	public void setName(String name) {
 		this.name = name;
-	}
-
-	public int getQuantity() {
-		return this.quantity;
-	}
-
-	public void setQuantity(int quantity) {
-		this.quantity = quantity;
 	}
 
 	public double getSalePrice() {

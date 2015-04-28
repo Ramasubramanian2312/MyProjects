@@ -81,6 +81,9 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 			function itemPresent() 
 			{alert("Item already added to cart.");}
 			
+			function itemPresent() 
+			{alert("Item already present in wishlist");}
+			
 		</script>
 		<%
 			String itemId = null;
@@ -90,6 +93,7 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 			action = request.getParameter("action");
 			itemId = request.getParameter("itemId");
 			CartDao cdao = new CartDao();
+			WishlistDao wdao = new WishlistDao();
 			ShoppingRestClient client = new ShoppingRestClient();
 			if(action!=null)
 			{
@@ -115,6 +119,28 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 						else
 						{
 							cdao.createCartItem(cart);	
+						}
+						
+					}
+					if("wishlist".equals(action))
+					{	
+						Wishlist wl = new Wishlist();
+						product = client.findProductById(itemId);
+						wl.setItemId(product.getItemId()+"");
+						wl.setCustomerId(session.getAttribute("username").toString());
+						wl.setName(product.getName());
+						wl.setThumbnailImage(product.getThumbnailImage());
+						wl.setSalePrice(product.getSalePrice());
+						
+						if(wdao.findWishlist(itemId) != null)
+						{
+							%>
+							<script>itemPresentWishlist();</script>
+							<%
+						}
+						else
+						{
+							wdao.createWishlistItem(wl);	
 						}
 						
 					}
@@ -179,6 +205,9 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 							{ %>
 						<li>						
 							<a href="myorders.jsp">My Orders</a>						
+						</li>
+						<li>						
+							<a href="wishlist.jsp">My WishList</a>						
 						</li>
 						<%} %>				
 						<li>
@@ -288,11 +317,10 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 					 <form action="products.jsp" onsubmit="return validItem();">
 					 	<input type="hidden" name="itemId" value="<%= i.get(j).getItemId() %>" />
 					 	<input type="hidden" name="search" value="<%= searchText %>" />
-<!-- 					 	<ul>
-					 	<li><i class="cart-1"></i></li></ul> -->
-					 	<button class="btn button" name="action" value="create">AddToCart</button>
+					 	<button class="btn btn-primary" name="action" value="create">AddToCart</button>
+					 	<button class="btn btn-primary" name="action" value="wishlist">AddToWishList</button>
 					 </form>
-				     <div class="button"><span><a href="details.jsp?id=<%=i.get(j).getItemId() %>" class="details">Details</a></span></div>
+				     <%-- <div class="button"><span><a href="details.jsp?id=<%=i.get(j).getItemId() %>" class="details">Details</a></span></div> --%>
 				</div>
 				<%
 				if((j % 4) == 0)

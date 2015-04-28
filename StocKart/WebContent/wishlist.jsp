@@ -82,68 +82,20 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 	<!-- header-section-starts -->
 		<script>
 			function itemPresent() 
-			{alert("Item already added to cart.");}
+			{alert("Item already present in cart.");}
 			
-			
-			function updateQuantity(id,custId,img,price)
-			{				
-				var qtyid = "quantity".concat(id);
-				var qty = document.getElementById(qtyid).value;
-				var pnameid = "pname".concat(id);
-				var pname = document.getElementById(pnameid).value;
-				var cart = 
-					{
-						itemId: id,
-						quantity: qty,
-						name: pname,
-						customerId: custId,
-						thumbnailImage: img,
-						salePrice: price
-					};
-				updateCart(cart);
-				<% Thread.sleep(3000); %>
-				location.reload(true);
-			}
-			
-			
-			function updateQuantityTest(id,custId,img,price)
-			{
-				alert(id);
-				alert(custId);
-				var qtyid = "quantity".concat(id);
-				var qty = document.getElementById(qtyid).value;
-				alert(qty);
-				alert(img);
-				alert(price);
-			}
 			
 			function removeItem(id){
-				removeCartItem(id);
+				removeWishlistItem(id);
 				location.reload(true);
 			}
 			
-			function updateCart(cart){
-				$.ajax(
-	                       {
-	                               url: "api/cart",
-	                               data: JSON.stringify(cart),
-	                               type: "put",
-	                               dataType: "json",
-	                                        contentType: "application/json",
-	                               success: function(response) {
-	                            	   	console.log(response);
-	                                      alert("Cart updated");
-	                               },
-	                               error: function(response) {
-	                                       console.log(response);
-	                               }
-	                       });
-			}
+
 			
-			function removeCartItem(id){
+			function removeWishlistItem(id){
 				$.ajax(	
 				{
-                    url: "api/cart/"+id,
+                    url: "api/wishlist/"+id,
                     type: "delete",
                     dataType: "json",
                              contentType: "application/json",
@@ -168,6 +120,7 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 			itemId = request.getParameter("itemId");
 			ShoppingRestClient client = new ShoppingRestClient();
 			CartDao cdao = new CartDao();
+			WishlistDao wdao = new WishlistDao();
 			if(action!=null)
 			{
 				if(session.getAttribute("username")!=null)
@@ -179,6 +132,7 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 						cart.setItemId(product.getItemId()+"");
 						cart.setCustomerId(session.getAttribute("username").toString());
 						cart.setName(product.getName());
+						cart.setQuantity(1);
 						cart.setThumbnailImage(product.getThumbnailImage());
 						cart.setSalePrice(product.getSalePrice());
 						
@@ -333,7 +287,7 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
     <div class="content">
     	<div class="content_top">
     		<div class="heading">
-    		<h3>My Shopping Cart</h3>
+    		<h3>My Wishlist</h3>
     		</div>
     		<div class="clearfix"></div>
     	</div>
@@ -365,17 +319,17 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 				<div class="clearfix">
 			</div>
 				<div class="sectiongroup">
-	
+	<form action="wishlist.jsp">
 			<table cellspacing='0'> <!-- cellspacing='0' is important, must stay -->
 
 	<!-- Table Header -->
 	<thead>
 		<tr>
 			<th>ITEM</th>
-			<th>QTY</th>
+			<!-- <th>QTY</th> -->
 			<th>PRICE</th>
-			<th>DELIVERY DETAILS</th>
-			<th>SUBTOTAL</th>
+			<th>ADD PRODUCT</th>
+			<!-- <th>SUBTOTAL</th> -->
 		</tr>
 	</thead>
 	<!-- Table Header -->
@@ -384,20 +338,20 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 	<tbody>
 
 		<tr>
-			
+			<%int count=0; %>
 		</tr><!-- Table Row -->
 		<%
-					List<Cart> clist = cdao.findAllItems(session.getAttribute("username").toString());
-					for(Cart c : clist){
+					List<Wishlist> wlist = wdao.findAllItems(session.getAttribute("username").toString());
+					for(Wishlist w : wlist){
 				%>
 				<tr>
-					<td><img src="<%=c.getThumbnailImage()%>" />
+					<td><img src="<%=w.getThumbnailImage()%>" />
 					&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 					&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 					&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-					<a href="#" onClick='removeItem("<%=c.getItemId()%>")'>Remove From Cart</a>
-					<br><%=c.getName() %>
-					</td>
+					<a href="#" onClick='removeItem("<%=w.getItemId()%>")'>Remove From Wishlist</a>
+					<br><%=w.getName() %>
+<%-- 					</td>
 					<td><input id="quantity<%=c.getItemId()%>" type="text" size="1" value="<%=c.getQuantity() %>"/>
 					<br>
 					<br>
@@ -406,43 +360,47 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 					 <input type="hidden" id="pname<%=c.getItemId()%>" value="<%=c.getName()%>" />
  					<input
 						type="submit" value="Update" onClick="updateQuantity('<%=c.getItemId()%>','<%=c.getCustomerId() %>','<%=c.getThumbnailImage() %>','<%=c.getSalePrice() %>')"/>
-						<%-- ,"<%=c.getCustomerId() %>","<%=c.getName() %>","<%=c.getThumbnailImage() %>","<%=c.getSalePrice() %>")'/> --%>
-						<%-- <a href="#" onClick='updateQuantity("<%=c.getItemId()%>","<%=c.getCustomerId() %>","<%=c.getName() %>","<%=c.getThumbnailImage() %>","<%=c.getSalePrice() %>")'
-						>Update</a> --%>
+						,"<%=c.getCustomerId() %>","<%=c.getName() %>","<%=c.getThumbnailImage() %>","<%=c.getSalePrice() %>")'/>
+						<a href="#" onClick='updateQuantity("<%=c.getItemId()%>","<%=c.getCustomerId() %>","<%=c.getName() %>","<%=c.getThumbnailImage() %>","<%=c.getSalePrice() %>")'
+						>Update</a>
 					</form>
 					</div>
-					</td>
+					</td> --%>
 					    <%-- <button class="btn btn-primary" 
 						onClick='updateQuantity("<%=c.getItemId()%>","<%=c.getCustomerId() %>","<%=c.getName() %>","<%=c.getThumbnailImage() %>","<%=c.getSalePrice() %>")' value="Change">Update</button></td> --%>
-					<td>$<%=c.getSalePrice() %></td>
+					<td>$<%=w.getSalePrice() %></td>
 					<td>*Free
 					<br>
 *Delivered in 2 business days.<br>
-Faster options may be available during checkout.</td>
-					<td>$<%=c.getSalePrice()*c.getQuantity() %></td>
+Faster options may be available during checkout.</td></tr>
+					<tr>
+					<td colspan="2">
+					<%-- <input type="hidden" name="itemId<%=w.getItemId() %>" value="<%= w.getItemId() %>" /> --%></td>
+					<td>
+					<%-- <button class="btn btn-primary" onClick="wishlist.jsp?itemId=<%=w.getItemId() %>">AddToCart</button> --%>
+					<i class="cart-1"></i>&nbsp;<a href="wishlist.jsp?action=create&itemId=<%=w.getItemId() %>">AddToCart</a>
+					</td>
 					
-				</tr>
+					</tr>
 
 				<%
 					}
 				%>
-				<tr>
-					<td colspan="3" align="right"><h3>Estimated Total: $<%=cdao.findCartTotal(session.getAttribute("username").toString()) %></h3></td>
-					<td colspan="2">
+<%-- 				<tr>
+					<td colspan="4" align="right"><h1>Estimated Total: $<%=cdao.findCartTotal(session.getAttribute("username").toString()) %></h1></td>
+					<td colspan="1">
 						<div class="btn_form">
 						<form>
-						<button class="btn default"><a href="index.jsp">Continue Shopping</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-						&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-						&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-						<a href="orders.jsp">CheckOut</a></button>
+						<button class="btn default"><a href="orders.jsp">CheckOut</a></button>
 						</form>
 						</div>
 					</td>
-				</tr>
+				</tr> --%>
 	</tbody>
 	<!-- Table Body -->
 
 </table>
+</form>
 		</div>
 			</div>
 					
