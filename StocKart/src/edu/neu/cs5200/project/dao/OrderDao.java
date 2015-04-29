@@ -8,6 +8,7 @@ import javax.ws.rs.Path;
 
 import edu.neu.cs5200.project.models.Order;
 import edu.neu.cs5200.project.models.Orderdetail;
+import edu.neu.cs5200.project.models.Payment;
 import edu.neu.cs5200.project.models.Userbean;
 
 @Path("/order")
@@ -36,6 +37,17 @@ public class OrderDao {
 		em.flush();
 		em.getTransaction().commit();
 		return order.getOrderdetails().get(0).getOrderDetailId();
+		
+	}
+	
+	public void addPayment(int orderId, Payment payment)
+	{
+		em.getTransaction().begin();
+		Order order = em.find(Order.class, orderId);
+		payment.setOrder(order);
+		order.setPayment(payment);
+		em.merge(order);
+		em.getTransaction().commit();
 		
 	}
     

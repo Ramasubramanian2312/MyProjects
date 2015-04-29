@@ -13,6 +13,7 @@
 		<class>edu.neu.cs5200.project.models.Wishlist</class>
 		<class>edu.neu.cs5200.project.models.Product</class>
 		<class>edu.neu.cs5200.project.models.Adminbean</class>
+		<class>edu.neu.cs5200.project.models.Payment</class>
 		<properties>
 			<property name="eclipselink.jdbc.password" value="gaurav" />
 			<property name="eclipselink.jdbc.user" value="root" />

@@ -115,11 +115,16 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 			function itemPresent() 
 			{alert("Item already added to cart.");}
 			
+			function itemPresentWishlist() 
+			{alert("Item already present in wishlist");}
+			
+			
 		</script>	
 	<% 
 		Product product = null;
 		ShoppingRestClient client = new ShoppingRestClient();
 		CartDao cdao = new CartDao();
+		WishlistDao wdao = new WishlistDao();
 		String itemId = request.getParameter("id");
 		String action = null;
 		action = request.getParameter("action");
@@ -127,7 +132,7 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 		{
 			if(session.getAttribute("username")!=null)
 			{
-				if("AddToCart".equals(action))
+				if("create".equals(action))
 				{	
 					Cart cart = new Cart();
 					product = client.findProductById(itemId);
@@ -147,6 +152,28 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 					else
 					{
 						cdao.createCartItem(cart);	
+					}
+					
+				}
+				if("wishlist".equals(action))
+				{	
+					Wishlist wl = new Wishlist();
+					product = client.findProductById(itemId);
+					wl.setItemId(product.getItemId()+"");
+					wl.setCustomerId(session.getAttribute("username").toString());
+					wl.setName(product.getName());
+					wl.setThumbnailImage(product.getThumbnailImage());
+					wl.setSalePrice(product.getSalePrice());
+					
+					if(wdao.findWishlist(itemId) != null)
+					{
+						%>
+						<script>itemPresentWishlist();</script>
+						<%
+					}
+					else
+					{
+						wdao.createWishlistItem(wl);	
 					}
 					
 				}
@@ -323,18 +350,28 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 									<ul>
 									</ul>
 									<div class="btn_form">
-										<form action="details.jsp">
+										<%-- <form action="details.jsp">
 										<input type="hidden" name="id" value="<%=p.getItemId() %>"/>
 											<input name="action" type="submit" value="AddToCart" title=""/>
-										</form>
+										</form> --%>
+					<% if(session.getAttribute("username") != null) {%>					
+					<form action="details.jsp" onsubmit="return validItem();">
+					 	<input type="hidden" name="id" value="<%= p.getItemId() %>" />					 	
+					 	<button class="btn btn-primary" name="action" value="create">AddToCart</button>
+					 	<button class="btn btn-primary" name="action" value="wishlist">AddToWishList</button>
+					 </form>
+					 <%} %>
+										
+										
+										
 									</div>
 									<script type="text/javascript">
 										function callHello() {
 											alert("Hello");
 										}
 									</script>
-									<span class="span_right"><a href="#">login to save
-											in wishlist </a></span>
+									<!-- <span class="span_right"><a href="#">login to save
+											in wishlist </a></span> -->
 									<div class="clearfix"></div>
 								</div>
 								<div class="filter-by-color"></div>
@@ -481,15 +518,16 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 								<textarea rows="1" cols="50" name="title"></textarea>
 								<br>
 								<textarea rows="10" cols="50" name="commentContent"></textarea>
+								
+								<br> How did you find the product: 
+								<input type="radio" name="rating" id="r1" value="1"> Poor &nbsp;&nbsp;
+								<input type="radio" name="rating" id="r2" value="2"> Not so Bad &nbsp;&nbsp; 
+								<input type="radio" name="rating" id="r3" value="3"> Satisfactory &nbsp;&nbsp;
+								<input type="radio" name="rating" id="r4" value="4"> Good &nbsp;&nbsp;
+								<input type="radio" name="rating" id="r5" value="5" checked="checked"> Excellent &nbsp;&nbsp;
+								<br>
 								<br><%if(session.getAttribute("username")!=null) {%> <input type="submit" name="post" value="review">
-								<%}else {%>  <a href="login.jsp">Login to Post Reviews</a><%} %> <br>
-								<br> How did you find the product: <input type="radio"
-									name="rating" id="r1" value="1"> Poor <input
-									type="radio" name="rating" id="r2" value="2"> Not so
-								Bad <input type="radio" name="rating" id="r3" value="3">
-								Satisfactory <input type="radio" name="rating" id="r4" value="4">
-								Good <input type="radio" name="rating" id="r5" value="5">
-								Excellent
+								<%}else {%>  <a href="login.jsp">Login to Post Reviews</a><%} %> 
 							</form>
 						</div>
 					</div>

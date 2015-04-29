@@ -294,7 +294,8 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 	<thead>
 	<tr> 
 	<th colspan=5>
-	  Order Date: <%=new SimpleDateFormat("MM-dd-yyyy").format(odr.getOrderDate())%> 
+	  <h3>Transaction Id: <%=odr.getPayment().getTrxnId()%>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+	   Order Date: <%=new SimpleDateFormat("MM-dd-yyyy").format(odr.getOrderDate())%></h3> 
 	</th>
 	</tr>
 		<tr>
@@ -346,15 +347,7 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 					}
 				%>
 				<tr>
-					<td colspan="4" align="right"><h1>Order Amount $<%=odr.getTotalPrice()%></h1></td>
-					<td colspan="1">
-						<div class="btn_form">
-						<%-- <form action="orders.jsp">
-						<input type="hidden" name="totalprice" value="<%=cdao.findCartTotal(session.getAttribute("username").toString()) %>"/>
-						<button name="action" value="addorder" type="submit" class="btn primary">Make Payment</button>
-						</form> --%>
-						</div>
-					</td>
+					<td colspan="5" align="right"><h3>Order Amount $<%=odr.getTotalPrice()%></h3></td>					
 				</tr>
 	</tbody>
 	<!-- Table Body -->

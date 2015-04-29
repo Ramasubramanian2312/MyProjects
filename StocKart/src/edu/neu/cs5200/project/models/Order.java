@@ -41,10 +41,24 @@ public class Order implements Serializable {
 	//bi-directional many-to-one association to Orderdetail
 	@OneToMany(mappedBy="order")
 	private List<Orderdetail> orderdetails;
+	
+	//bi-directional one-to-one association to Custinfo
+	@OneToOne(mappedBy="order", cascade=CascadeType.MERGE)
+	private Payment payment;
+
 
 	public Order() {
 	}
 
+	public Payment getPayment() {
+		return this.payment;
+	}
+
+	public void setPayment(Payment payment) {
+		this.payment = payment;
+	}
+	
+	
 	public Integer getOrderId() {
 		return this.orderId;
 	}

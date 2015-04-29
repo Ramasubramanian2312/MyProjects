@@ -81,7 +81,7 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 			function itemPresent() 
 			{alert("Item already added to cart.");}
 			
-			function itemPresent() 
+			function itemPresentWishlist() 
 			{alert("Item already present in wishlist");}
 			
 		</script>

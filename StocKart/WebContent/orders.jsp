@@ -11,7 +11,8 @@ License URL: http://creativecommons.org/licenses/by/3.0/
 	import="edu.neu.cs5200.project.models.*"
 	import="edu.neu.cs5200.project.dao.*"
 	import="java.util.*"
-	import="java.text.*"%>
+	import="java.text.*"
+	import="java.math.*"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -187,27 +188,6 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 						}
 						
 						
-					}
-			 		if("addorder".equals(action))
-					{
-						Order order = new Order(null,new Date(),"new",price,null,null);
-						int orderId = udao.addOrder(session.getAttribute("username").toString(), order);
-						System.out.println(orderId);
-						//List<Orderdetail> lod = new ArrayList<Orderdetail>();
-						List<Cart> cartlist = cdao.findAllItems(session.getAttribute("username").toString());
-						for(int i=0;i<cartlist.size();i++){
-							Orderdetail detail = new Orderdetail();
-							detail.setOrderDetailId(null);
-							detail.setItemId(cartlist.get(i).getItemId());
-							detail.setQuantity(cartlist.get(i).getQuantity());
-							detail.setName(cartlist.get(i).getName());
-							detail.setThumbnailImage(cartlist.get(i).getThumbnailImage());
-							detail.setSalePrice(cartlist.get(i).getSalePrice());
-							odao.addOrderdetail(orderId, detail);
-						}
-						cdao.clearCart(session.getAttribute("username").toString());%>
-						<script>alert("Order placed successfully!")</script>
-						<% response.sendRedirect("index.jsp");
 					}
 				}
 				else
@@ -401,10 +381,20 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 		<tr>
 			
 		</tr><!-- Table Row -->
-		<%
-					List<Cart> clist = cdao.findAllItems(session.getAttribute("username").toString());
+		<%			int counter = 1;
+					List<Cart> clist = cdao.findAllItems(session.getAttribute("username").toString());%>
+					<form action="https://www.sandbox.paypal.com/cgi-bin/webscr"
+											method="post">
+											<input type="hidden" name="cmd" value="_cart"> <input
+												type="hidden" name="upload" value="1"> <input
+												type="hidden" name="business" value="business@boxshop.com">
+					<%
 					for(Cart c : clist){
 				%>
+				<input type="hidden" name="quantity_<%=counter %>" value="<%=c.getQuantity() %>"> <input
+												type="hidden" name="item_name_<%=counter %>" value="<%=c.getName() %>"> <input
+												type="hidden" name="item_number_<%=counter %>" value="<%=c.getItemId()%>">
+											<input type="hidden" name="amount_<%=counter %>" value="<%=c.getSalePrice() %>">
 				<tr>
 					<td><img src="<%=c.getThumbnailImage()%>" />
 					&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
@@ -428,22 +418,46 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 					<br>
 *Delivered in 2 business days.<br>
 Faster options may be available during checkout.</td>
-					<td>$<%=c.getSalePrice()*c.getQuantity() %></td>
+					<td>$<%=new BigDecimal(c.getSalePrice()*c.getQuantity()).setScale(2, RoundingMode.HALF_UP).doubleValue() %></td>
 					
 				</tr>
 
 				<%
-					}
+					counter++;
+				}
 				%>
 				<tr>
 					<td colspan="4" align="right"><h1>Payable Amount: $<%=cdao.findCartTotal(session.getAttribute("username").toString()) %></h1></td>
 					<td colspan="1">
 						<div class="btn_form">
-						<form action="orders.jsp">
-						<input type="hidden" name="totalprice" value="<%=cdao.findCartTotal(session.getAttribute("username").toString()) %>"/>
-						<button name="action" value="addorder" type="submit" class="btn primary">Place Order</button>
-						</form>
-						</div>
+											<%Userbean u=new Userbean();
+											 u.setUsername(session.getAttribute("username").toString());%>
+											<input type="hidden" name="currency_code" value="USD">
+											<input type="hidden" name="first_name" value="<% if(udao.getUname(u).getCustinfo() != null) { udao.getUname(u).getCustinfo().getFirstname();}%>">
+											<input type="hidden" name="last_name" value="<%if(udao.getUname(u).getCustinfo() != null) { udao.getUname(u).getCustinfo().getLastname();}%>"> 
+											<input
+												type="hidden" name="address1" value="9 Elm Street">
+											<input type="hidden" name="address2" value="Apt 1916"> <input
+												type="hidden" name="city" value="Boston"> <input
+												type="hidden" name="state" value="MA"> <input
+												type="hidden" name="zip" value="02120"> <input
+												type="hidden" name="night_phone_a" value="857"> <input
+												type="hidden" name="night_phone_b" value="928"> <input
+												type="hidden" name="night_phone_c" value="5763"> <input
+												type="hidden" name="email" value="<%=udao.getUname(u).getEmailId() %>">
+<!-- 											<input type='hidden' name='rm' value='2'> <input
+												type="hidden" value="http://localhost:8080/PayPal/index.jsp"
+												name="return"> -->
+
+
+											<!--<input type="hidden" name="tax_cart" value="5.13"> -->
+											 <input type="image"
+												src="images/express-checkout-hero.png"
+												border="0" name="upload"
+												alt="Make payments with PayPal - it's fast, free and secure!"
+												width="200" height="45">
+										</form>
+									</div>
 					</td>
 				</tr>
 	</tbody>

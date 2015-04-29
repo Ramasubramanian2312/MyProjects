@@ -10,7 +10,8 @@ License URL: http://creativecommons.org/licenses/by/3.0/
 	import="edu.neu.cs5200.project.rest.client.*"
 	import="edu.neu.cs5200.project.models.*"
 	import="edu.neu.cs5200.project.dao.*"
-	import="java.util.*"%>
+	import="java.util.*"
+	import="java.math.*"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -419,7 +420,7 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 					<br>
 *Delivered in 2 business days.<br>
 Faster options may be available during checkout.</td>
-					<td>$<%=c.getSalePrice()*c.getQuantity() %></td>
+					<td>$<%=new BigDecimal(c.getSalePrice()*c.getQuantity()).setScale(2, RoundingMode.HALF_UP).doubleValue() %></td>
 					
 				</tr>
 

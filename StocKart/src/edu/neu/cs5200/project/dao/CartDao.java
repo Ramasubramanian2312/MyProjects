@@ -1,7 +1,11 @@
 package edu.neu.cs5200.project.dao;
 
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.List;
+
+
 
 
 import javax.persistence.EntityManager;
@@ -15,6 +19,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
+
 import edu.neu.cs5200.project.models.Cart;
 
 @Path("/cart")
@@ -90,7 +95,7 @@ public class CartDao {
     		for(Double d:lst){
     			total+=d;
     		}
-    		return Math.round(total);
+    		return new BigDecimal(total).setScale(2, RoundingMode.HALF_UP).doubleValue();
     }
 
 	public CartDao() {
